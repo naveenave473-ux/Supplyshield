@@ -101,7 +101,7 @@ export const Tilt3DCard: React.FC<Tilt3DCardProps> = ({
           className="absolute inset-0 rounded-[inherit] pointer-events-none transition-opacity duration-300 overflow-hidden"
           style={{
             opacity: glarePos.opacity,
-            background: `radial-gradient(circle 240px at ${glarePos.x}% ${glarePos.y}%, rgba(255, 255, 255, 0.35) 0%, rgba(53, 191, 255, 0.12) 40%, transparent 80%)`,
+            background: `radial-gradient(circle 240px at ${glarePos.x}% ${glarePos.y}%, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.08) 50%, transparent 80%)`,
           }}
         />
       )}

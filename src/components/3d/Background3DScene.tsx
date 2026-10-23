@@ -17,20 +17,37 @@ function checkWebGLSupport(): boolean {
 // Graceful CSS Fallback when WebGL is unavailable
 const FallbackBackground: React.FC = () => {
   return (
-    <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
-      <div className="absolute top-1/4 left-1/3 w-[600px] h-[600px] bg-[#0FD3F2]/[0.07] rounded-full blur-[140px] animate-pulse" />
-      <div className="absolute bottom-1/4 right-1/4 w-[700px] h-[700px] bg-[#921CC0]/[0.07] rounded-full blur-[160px] animate-pulse" style={{ animationDuration: '6s' }} />
-      <div className="absolute top-1/2 right-1/3 w-[450px] h-[450px] bg-[#082495]/[0.06] rounded-full blur-[130px]" />
+    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-[#030305]">
+      <img
+        src="https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/f1631235-0a76-464d-8f1d-2c4b48a997d5.jpg"
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover object-center sm:object-bottom opacity-100"
+      />
     </div>
   );
 };
 
 export const Background3DScene: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [hasWebGL, setHasWebGL] = useState<boolean>(true);
+  const [isVideoReady, setIsVideoReady] = useState<boolean>(false);
 
   useEffect(() => {
-    // 1. Check WebGL support
+    const video = videoRef.current;
+    if (video) {
+      video.muted = true;
+      video.defaultMuted = true;
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => setIsVideoReady(true))
+          .catch(() => setIsVideoReady(true));
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     if (!checkWebGLSupport()) {
       setHasWebGL(false);
       return;
@@ -39,12 +56,11 @@ export const Background3DScene: React.FC = () => {
     const container = containerRef.current;
     if (!container) return;
 
-    // Check reduced motion preference
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // 2. Initialize Three.js Scene, Camera, Renderer
+    // 1. Initialize Three.js Scene with Deep Black Atmospheric Fog
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x1d0445, 0.038); // Swatch 4: Midnight Void
+    scene.fog = new THREE.FogExp2(0x050505, 0.015);
 
     const width = container.clientWidth || window.innerWidth;
     const height = container.clientHeight || window.innerHeight;
@@ -67,35 +83,39 @@ export const Background3DScene: React.FC = () => {
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.1;
+    renderer.toneMappingExposure = 1.05;
 
-    // Clean container before appending
     while (container.firstChild) {
       container.removeChild(container.firstChild);
     }
     container.appendChild(renderer.domElement);
 
-    // 3. Lighting Setup with 7-Color Palette
-    const ambientLight = new THREE.AmbientLight(0x171665, 1.6); // Swatch 3: Midnight Indigo
+    // 2. Volumetric Industrial Lighting with Feather Chromatic Aura
+    const ambientLight = new THREE.AmbientLight(0x171665, 2.0);
     scene.add(ambientLight);
 
-    const cyanPointLight = new THREE.PointLight(0x0fd3f2, 3.2, 30); // Swatch 7: Neon Cyan
-    cyanPointLight.position.set(10, 8, 8);
-    scene.add(cyanPointLight);
+    const keyWhiteLight = new THREE.DirectionalLight(0xffffff, 2.0);
+    keyWhiteLight.position.set(10, 12, 10);
+    scene.add(keyWhiteLight);
 
-    const violetPointLight = new THREE.PointLight(0x921cc0, 2.8, 30); // Swatch 1: Electric Violet
-    violetPointLight.position.set(-10, -6, 6);
-    scene.add(violetPointLight);
+    // Cyan Feather Rim Light (#0FD3F2)
+    const cyanRimLight = new THREE.PointLight(0x0FD3F2, 3.2, 40);
+    cyanRimLight.position.set(-10, -8, 8);
+    scene.add(cyanRimLight);
 
-    const ceruleanDirLight = new THREE.DirectionalLight(0x007cb8, 1.2); // Swatch 6: Cerulean Cyan
-    ceruleanDirLight.position.set(0, 12, 10);
-    scene.add(ceruleanDirLight);
+    // Magenta Feather Rim Light (#921CC0)
+    const magentaRimLight = new THREE.PointLight(0x921CC0, 3.0, 40);
+    magentaRimLight.position.set(10, 8, 8);
+    scene.add(magentaRimLight);
 
-    // 4. Construct Signature SupplyShield 3D Emblem
+    const softFillLight = new THREE.DirectionalLight(0x082495, 1.2);
+    softFillLight.position.set(0, -10, -5);
+    scene.add(softFillLight);
+
+    // 3. Construct 3D Shield Sculpture
     const shieldGroup = new THREE.Group();
-    shieldGroup.position.set(5.5, -0.5, -2); // Positioned slightly offset to create elegant depth without obscuring center content
+    shieldGroup.position.set(5.2, -0.4, -2.5);
 
-    // Create 2D shield outline shape
     const shieldShape = new THREE.Shape();
     shieldShape.moveTo(0, 3.2);
     shieldShape.bezierCurveTo(1.6, 3.1, 2.5, 2.4, 2.6, 0.8);
@@ -115,39 +135,39 @@ export const Background3DScene: React.FC = () => {
     const shieldGeometry = new THREE.ExtrudeGeometry(shieldShape, extrudeSettings);
     shieldGeometry.center();
 
-    // Translucent glass-like material
+    // Metallic liquid-glass material in Midnight Void (#1D0445)
     const shieldMaterial = new THREE.MeshPhysicalMaterial({
-      color: 0x171665, // Midnight Indigo
-      emissive: 0x1d0445, // Midnight Void
-      emissiveIntensity: 0.4,
-      roughness: 0.15,
-      metalness: 0.3,
+      color: 0x1D0445,
+      emissive: 0x082495,
+      emissiveIntensity: 0.35,
+      roughness: 0.18,
+      metalness: 0.85,
       transparent: true,
-      opacity: 0.45,
-      clearcoat: 0.85,
+      opacity: 0.65,
+      clearcoat: 1.0,
       clearcoatRoughness: 0.1,
     });
 
     const shieldMesh = new THREE.Mesh(shieldGeometry, shieldMaterial);
     shieldGroup.add(shieldMesh);
 
-    // Glowing edge wireframe on the shield (Neon Cyan)
+    // Glowing edge wireframe on shield in Neon Cyan (#0FD3F2)
     const edgesGeo = new THREE.EdgesGeometry(shieldGeometry, 25);
     const edgesMat = new THREE.LineBasicMaterial({
-      color: 0x0fd3f2,
+      color: 0x0FD3F2,
       transparent: true,
-      opacity: 0.65,
+      opacity: 0.70,
       linewidth: 1,
     });
     const edgeLines = new THREE.LineSegments(edgesGeo, edgesMat);
     shieldGroup.add(edgeLines);
 
-    // Inner glowing core polyhedron (Electric Violet core)
+    // Inner glowing core polyhedron with Magenta & Cyan (#921CC0 / #0FD3F2)
     const coreGeo = new THREE.OctahedronGeometry(1.0, 0);
     const coreMat = new THREE.MeshStandardMaterial({
-      color: 0x921cc0,
-      emissive: 0x921cc0,
-      emissiveIntensity: 1.1,
+      color: 0x0FD3F2,
+      emissive: 0x921CC0,
+      emissiveIntensity: 0.85,
       wireframe: true,
       transparent: true,
       opacity: 0.85,
@@ -155,23 +175,23 @@ export const Background3DScene: React.FC = () => {
     const coreMesh = new THREE.Mesh(coreGeo, coreMat);
     shieldGroup.add(coreMesh);
 
-    // Orbital ring 1 around the shield (Neon Cyan)
+    // Orbital ring 1 in Neon Cyan (#0FD3F2)
     const ring1Geo = new THREE.TorusGeometry(3.6, 0.02, 16, 100);
     const ring1Mat = new THREE.MeshBasicMaterial({
-      color: 0x0fd3f2,
+      color: 0x0FD3F2,
       transparent: true,
-      opacity: 0.45,
+      opacity: 0.55,
     });
     const ring1 = new THREE.Mesh(ring1Geo, ring1Mat);
     ring1.rotation.x = Math.PI / 3;
     shieldGroup.add(ring1);
 
-    // Orbital ring 2 around the shield (Royal Violet)
+    // Orbital ring 2 in Electric Magenta (#921CC0)
     const ring2Geo = new THREE.TorusGeometry(4.2, 0.015, 16, 100);
     const ring2Mat = new THREE.MeshBasicMaterial({
-      color: 0x4c128a,
+      color: 0x921CC0,
       transparent: true,
-      opacity: 0.4,
+      opacity: 0.50,
     });
     const ring2 = new THREE.Mesh(ring2Geo, ring2Mat);
     ring2.rotation.y = Math.PI / 4;
@@ -180,7 +200,7 @@ export const Background3DScene: React.FC = () => {
 
     scene.add(shieldGroup);
 
-    // 5. Digital Supply-Chain Constellation Particles (Neon Cyan + Cerulean)
+    // 4. Digital Supply-Chain Constellation Particles (Neon Cyan)
     const particleCount = 280;
     const particlePositions = new Float32Array(particleCount * 3);
     const particleScales = new Float32Array(particleCount);
@@ -196,23 +216,22 @@ export const Background3DScene: React.FC = () => {
     particlesGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
     particlesGeo.setAttribute('scale', new THREE.BufferAttribute(particleScales, 1));
 
-    // Particle Material (Neon Cyan)
     const particlesMat = new THREE.PointsMaterial({
-      color: 0x0fd3f2,
+      color: 0x0FD3F2,
       size: 0.14,
       transparent: true,
-      opacity: 0.65,
+      opacity: 0.75,
       blending: THREE.AdditiveBlending,
     });
 
     const particlesMesh = new THREE.Points(particlesGeo, particlesMat);
     scene.add(particlesMesh);
 
-    // 6. Connected Constellation Lines (Cerulean Cyan)
+    // 5. Connected Constellation Lines (Cerulean Cyan)
     const linePositions: number[] = [];
     const maxDistance = 7;
-    for (let i = 0; i < 80; i++) {
-      for (let j = i + 1; j < 80; j++) {
+    for (let i = 0; i < 75; i++) {
+      for (let j = i + 1; j < 75; j++) {
         const dx = particlePositions[i * 3] - particlePositions[j * 3];
         const dy = particlePositions[i * 3 + 1] - particlePositions[j * 3 + 1];
         const dz = particlePositions[i * 3 + 2] - particlePositions[j * 3 + 2];
@@ -233,24 +252,24 @@ export const Background3DScene: React.FC = () => {
     const linesGeo = new THREE.BufferGeometry();
     linesGeo.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
     const linesMat = new THREE.LineBasicMaterial({
-      color: 0x007cb8,
+      color: 0x007CB8,
       transparent: true,
       opacity: 0.22,
     });
     const constellationLines = new THREE.LineSegments(linesGeo, linesMat);
     scene.add(constellationLines);
 
-    // 7. Floating Low-Poly Geometric Crystals in the Background Depth
+    // 6. Floating Low-Poly Metallic Polyhedrons in Spatial Depth (Amethyst & Void)
     const floatingCrystals: THREE.Mesh[] = [];
     const crystalGeo = new THREE.IcosahedronGeometry(0.8, 0);
     const crystalMat = new THREE.MeshStandardMaterial({
-      color: 0x1d0445,
-      emissive: 0x921cc0,
-      emissiveIntensity: 0.25,
-      roughness: 0.3,
-      metalness: 0.6,
+      color: 0x1D0445,
+      emissive: 0x4C128A,
+      emissiveIntensity: 0.5,
+      roughness: 0.2,
+      metalness: 0.9,
       transparent: true,
-      opacity: 0.45,
+      opacity: 0.65,
       wireframe: true,
     });
 
@@ -270,7 +289,7 @@ export const Background3DScene: React.FC = () => {
       floatingCrystals.push(crystal);
     });
 
-    // 8. Gentle Parallax on Mouse Movement
+    // 7. Pointer Responsive Parallax
     let mouseX = 0;
     let mouseY = 0;
     let targetCameraX = 0;
@@ -280,13 +299,13 @@ export const Background3DScene: React.FC = () => {
       if (prefersReducedMotion) return;
       const windowHalfX = window.innerWidth / 2;
       const windowHalfY = window.innerHeight / 2;
-      mouseX = (event.clientX - windowHalfX) * 0.0006;
-      mouseY = (event.clientY - windowHalfY) * 0.0006;
+      mouseX = (event.clientX - windowHalfX) * 0.0005;
+      mouseY = (event.clientY - windowHalfY) * 0.0005;
     };
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
 
-    // 9. Resize Handling
+    // 8. Responsive Resize
     const handleResize = () => {
       if (!container) return;
       const newWidth = container.clientWidth || window.innerWidth;
@@ -298,42 +317,51 @@ export const Background3DScene: React.FC = () => {
 
     window.addEventListener('resize', handleResize);
 
+    // 9. Tab Visibility Performance Optimization
+    let isTabVisible = !document.hidden;
+    const handleVisibilityChange = () => {
+      isTabVisible = !document.hidden;
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
     // 10. Animation Loop
     let animationFrameId: number;
-    let clock = new THREE.Clock();
+    const clock = new THREE.Clock();
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
+
+      if (!isTabVisible) return;
 
       const elapsedTime = clock.getElapsedTime();
 
       if (!prefersReducedMotion) {
         // Slow continuous rotation of SupplyShield
-        shieldGroup.rotation.y = Math.sin(elapsedTime * 0.25) * 0.35 + 0.15;
-        shieldGroup.rotation.x = Math.cos(elapsedTime * 0.2) * 0.12;
-        shieldGroup.position.y = -0.5 + Math.sin(elapsedTime * 0.5) * 0.3;
+        shieldGroup.rotation.y = Math.sin(elapsedTime * 0.22) * 0.3 + 0.15;
+        shieldGroup.rotation.x = Math.cos(elapsedTime * 0.18) * 0.1;
+        shieldGroup.position.y = -0.4 + Math.sin(elapsedTime * 0.45) * 0.25;
 
         // Counter-rotating inner core and orbital rings
-        coreMesh.rotation.y += 0.015;
-        coreMesh.rotation.x += 0.01;
-        ring1.rotation.z += 0.004;
-        ring2.rotation.z -= 0.003;
+        coreMesh.rotation.y += 0.012;
+        coreMesh.rotation.x += 0.008;
+        ring1.rotation.z += 0.003;
+        ring2.rotation.z -= 0.0025;
 
         // Gentle drift of background particles
-        particlesMesh.rotation.y = elapsedTime * 0.012;
-        particlesMesh.rotation.x = Math.sin(elapsedTime * 0.01) * 0.05;
-        constellationLines.rotation.y = elapsedTime * 0.012;
+        particlesMesh.rotation.y = elapsedTime * 0.01;
+        particlesMesh.rotation.x = Math.sin(elapsedTime * 0.008) * 0.04;
+        constellationLines.rotation.y = elapsedTime * 0.01;
 
-        // Slow tumbling of floating background crystals
+        // Slow tumbling of floating background polyhedrons
         floatingCrystals.forEach((crystal, idx) => {
-          crystal.rotation.x += 0.004 * (idx % 2 === 0 ? 1 : -1);
-          crystal.rotation.y += 0.006;
-          crystal.position.y += Math.sin(elapsedTime * 0.6 + idx) * 0.003;
+          crystal.rotation.x += 0.003 * (idx % 2 === 0 ? 1 : -1);
+          crystal.rotation.y += 0.005;
+          crystal.position.y += Math.sin(elapsedTime * 0.5 + idx) * 0.0025;
         });
 
         // Gentle camera parallax lerping
-        targetCameraX += (mouseX * 4 - targetCameraX) * 0.04;
-        targetCameraY += (-mouseY * 3 - targetCameraY) * 0.04;
+        targetCameraX += (mouseX * 3.5 - targetCameraX) * 0.035;
+        targetCameraY += (-mouseY * 2.5 - targetCameraY) * 0.035;
         camera.position.x = targetCameraX;
         camera.position.y = targetCameraY;
         camera.lookAt(0, 0, 0);
@@ -353,6 +381,7 @@ export const Background3DScene: React.FC = () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('resize', handleResize);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
 
       if (container && renderer.domElement && container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement);
@@ -385,10 +414,63 @@ export const Background3DScene: React.FC = () => {
 
   return (
     <div
-      ref={containerRef}
-      className="fixed inset-0 pointer-events-none -z-10 overflow-hidden select-none"
+      className="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none bg-[#030305]"
       style={{ width: '100vw', height: '100vh' }}
       aria-hidden="true"
-    />
+    >
+      {/* 3D Spinning Dotted Particle Globe Media Plate */}
+      <div id="globe-bg-media" className="absolute inset-0 w-full h-full overflow-hidden transition-opacity duration-500">
+        {/* Still layer: immediate baseline poster with identical geometry */}
+        <img
+          src="https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/f1631235-0a76-464d-8f1d-2c4b48a997d5.jpg"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover object-center sm:object-bottom opacity-100"
+        />
+
+        {/* Video layer: 4s loop rotating steadily left to right with glowing rim and sliding particle rings */}
+        <video
+          ref={videoRef}
+          src="https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/e71aea27-a808-4ae3-8231-a469d49285d4.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          onLoadedData={() => setIsVideoReady(true)}
+          onCanPlay={() => setIsVideoReady(true)}
+          className={`absolute inset-0 w-full h-full object-cover object-center sm:object-bottom transition-opacity duration-700 ${
+            isVideoReady ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
+
+        {/* Floating Glass Coin Chips along the background light lines */}
+        <div className="hidden md:flex absolute left-[7%] top-[36%] w-10 h-10 rounded-full border border-white/20 bg-white/[0.06] backdrop-blur-md items-center justify-center text-sm font-semibold text-white/90 shadow-lg">
+          ₿
+        </div>
+        <div className="hidden md:flex absolute right-[8%] top-[30%] w-10 h-10 rounded-full border border-white/20 bg-white/[0.06] backdrop-blur-md items-center justify-center text-sm font-semibold text-white/90 shadow-lg">
+          Ξ
+        </div>
+        <div className="hidden md:flex absolute left-[10%] bottom-[20%] w-10 h-10 rounded-full border border-white/20 bg-white/[0.06] backdrop-blur-md items-center justify-center text-sm font-semibold text-white/90 shadow-lg">
+          ₮
+        </div>
+        <div className="hidden md:flex absolute right-[9%] bottom-[24%] w-10 h-10 rounded-full border border-white/20 bg-white/[0.06] backdrop-blur-md items-center justify-center text-sm font-semibold text-white/90 shadow-lg">
+          ⬡
+        </div>
+
+        {/* Soft edge feathering that preserves full center globe vibrancy */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              'radial-gradient(ellipse 95% 85% at 50% 50%, transparent 65%, rgba(3, 3, 5, 0.75) 100%)',
+          }}
+        />
+      </div>
+
+      {/* Three.js Canvas container for metallic orbital elements & particles */}
+      <div
+        ref={containerRef}
+        className="absolute inset-0 w-full h-full"
+      />
+    </div>
   );
 };

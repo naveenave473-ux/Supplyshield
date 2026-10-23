@@ -105,13 +105,13 @@ export const PurchaseOrdersPage: React.FC = () => {
       sortable: true,
       render: (po) => (
         <div>
-          <span className="font-mono font-bold text-xs text-white group-hover:text-primary transition-colors block">
+          <span className="font-mono font-medium text-xs text-white group-hover:text-white transition-colors block">
             {po.poNumber}
           </span>
-          <span className="text-xs text-[#BEC7D5] truncate max-w-[200px] block font-medium">
+          <span className="text-xs text-white/70 truncate max-w-[200px] block font-normal">
             {po.itemName}
           </span>
-          <span className="text-[10px] text-[#BEC7D5]/70 font-mono">{po.itemCode}</span>
+          <span className="text-[10px] text-white/40 font-mono">{po.itemCode}</span>
         </div>
       ),
     },
@@ -120,7 +120,7 @@ export const PurchaseOrdersPage: React.FC = () => {
       header: 'Supplier',
       sortable: true,
       render: (po) => (
-        <span className="text-xs text-white font-medium block">{po.supplierName}</span>
+        <span className="text-xs text-white font-normal block">{po.supplierName}</span>
       ),
     },
     {
@@ -129,7 +129,7 @@ export const PurchaseOrdersPage: React.FC = () => {
       sortable: true,
       render: (po) => (
         <span className="font-mono text-xs text-white">
-          {po.quantity.toLocaleString()} <span className="text-[#BEC7D5]/70">{po.unit}</span>
+          {po.quantity.toLocaleString()} <span className="text-white/50">{po.unit}</span>
         </span>
       ),
     },
@@ -138,7 +138,7 @@ export const PurchaseOrdersPage: React.FC = () => {
       header: 'Value ($)',
       sortable: true,
       render: (po) => (
-        <span className="font-mono text-xs font-semibold text-white">
+        <span className="font-mono text-xs font-medium text-white">
           ${po.totalValue.toLocaleString()}
         </span>
       ),
@@ -151,11 +151,11 @@ export const PurchaseOrdersPage: React.FC = () => {
         const isDelayed = po.status === 'delayed' || po.status === 'critical';
         return (
           <div className="font-mono text-xs">
-            <span className={isDelayed ? 'text-[#921CC0] font-bold' : 'text-[#B7F000]'}>
+            <span className={isDelayed ? (po.status === 'critical' ? 'text-[#921CC0] font-medium' : 'text-[#007CB8] font-medium') : 'text-[#0FD3F2]'}>
               {po.revisedDeliveryDate}
             </span>
             {isDelayed && (
-              <span className="text-[10px] text-[#BEC7D5]/60 block line-through">
+              <span className="text-[10px] text-white/40 block line-through">
                 {po.expectedDeliveryDate}
               </span>
             )}
@@ -169,16 +169,16 @@ export const PurchaseOrdersPage: React.FC = () => {
       render: (po) => (
         <div className="space-y-1 min-w-[90px]">
           <div className="flex justify-between text-[11px] font-mono">
-            <span className="text-white">{po.deliveryProgress}%</span>
+            <span className="text-white/80">{po.deliveryProgress}%</span>
           </div>
-          <div className="h-1.5 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
+          <div className="h-1.5 w-full bg-black/60 rounded-full overflow-hidden border border-white/10">
             <div
               className={`h-full rounded-full transition-all duration-300 ${
                 po.status === 'critical'
-                  ? 'bg-[#921CC0] shadow-[0_0_8px_rgba(146,28,192,0.8)]'
+                  ? 'bg-[#921CC0] shadow-[0_0_8px_rgba(146,28,192,0.6)]'
                   : po.status === 'delayed'
-                  ? 'bg-[#F59E0B]'
-                  : 'bg-[#B7F000] shadow-[0_0_8px_rgba(183,240,0,0.6)]'
+                  ? 'bg-[#007CB8] shadow-[0_0_8px_rgba(0,124,184,0.6)]'
+                  : 'bg-[#0FD3F2] shadow-[0_0_8px_rgba(15,211,242,0.6)]'
               }`}
               style={{ width: `${po.deliveryProgress}%` }}
             />
@@ -195,7 +195,7 @@ export const PurchaseOrdersPage: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 px-4 sm:px-6 lg:px-8 max-w-[1600px] mx-auto">
       <PageHeader
         breadcrumbs={['SupplyShield', 'Procurement Orders']}
         title="Purchase Orders Intelligence"
@@ -205,7 +205,7 @@ export const PurchaseOrdersPage: React.FC = () => {
       {/* Filter and Search Bar */}
       <GlassPanel className="p-4 flex flex-col md:flex-row items-center justify-between gap-4">
         {/* Status Segmented Tabs */}
-        <div className="flex items-center gap-1.5 p-1 rounded-xl neu-segmented-container overflow-x-auto w-full md:w-auto">
+        <div className="flex items-center gap-1.5 p-1 rounded-xl bg-black/40 border border-white/10 overflow-x-auto w-full md:w-auto">
           {statusTabs.map((tab) => (
             <button
               key={tab.id}
@@ -213,14 +213,16 @@ export const PurchaseOrdersPage: React.FC = () => {
                 setStatusFilter(tab.id);
                 setCurrentPage(1);
               }}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-150 flex items-center gap-1.5 whitespace-nowrap ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-150 flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
                 statusFilter === tab.id
-                  ? 'neu-raised text-primary bg-[#171665] border border-primary/30 shadow-sm'
-                  : 'text-[#BEC7D5] hover:text-white'
+                  ? 'bg-gradient-to-r from-[#0FD3F2] to-[#007CB8] text-[#06040A] font-bold shadow-[0_2px_12px_rgba(15,211,242,0.4)]'
+                  : 'text-white/65 hover:text-[#0FD3F2]'
               }`}
             >
               <span>{tab.label}</span>
-              <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-white/10 text-white font-mono">
+              <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${
+                statusFilter === tab.id ? 'bg-black/20 text-[#06040A]' : 'bg-white/10 text-white/70'
+              }`}>
                 {tab.count}
               </span>
             </button>
@@ -256,7 +258,7 @@ export const PurchaseOrdersPage: React.FC = () => {
         />
 
         {/* Pagination Bar */}
-        <div className="flex items-center justify-between px-2 text-xs text-[#BEC7D5]">
+        <div className="flex items-center justify-between px-2 text-xs text-white/60">
           <span>
             Showing {(currentPage - 1) * pageSize + 1} to{' '}
             {Math.min(currentPage * pageSize, filteredOrders.length)} of{' '}
@@ -265,7 +267,7 @@ export const PurchaseOrdersPage: React.FC = () => {
 
           <div className="flex items-center gap-2">
             <NeumorphicButton
-              variant="raised"
+              variant="secondary"
               size="sm"
               disabled={currentPage === 1}
               onClick={() => setCurrentPage((p) => p - 1)}
@@ -276,7 +278,7 @@ export const PurchaseOrdersPage: React.FC = () => {
               Page {currentPage} of {totalPages}
             </span>
             <NeumorphicButton
-              variant="raised"
+              variant="secondary"
               size="sm"
               disabled={currentPage === totalPages}
               onClick={() => setCurrentPage((p) => p + 1)}
@@ -324,24 +326,24 @@ export const PurchaseOrdersPage: React.FC = () => {
             <div
               className={`p-4 rounded-2xl border flex items-start gap-3 ${
                 selectedPO.status === 'critical'
-                  ? 'bg-[#921CC0]/20 border-[#921CC0]/40 text-[#921CC0]'
+                  ? 'bg-[#FF6B6B]/10 border-[#FF6B6B]/30 text-[#FF6B6B]'
                   : selectedPO.status === 'delayed'
-                  ? 'bg-[#F59E0B]/15 border-[#F59E0B]/35 text-[#FBBF24]'
-                  : 'bg-[#B7F000]/15 border-[#B7F000]/35 text-[#B7F000]'
+                  ? 'bg-[#E5A53D]/10 border-[#E5A53D]/30 text-[#E5A53D]'
+                  : 'bg-[#3DD598]/10 border-[#3DD598]/30 text-[#3DD598]'
               }`}
             >
               <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5" />
               <div>
-                <div className="flex items-center gap-2 font-bold text-sm">
+                <div className="flex items-center gap-2 font-medium text-sm text-white">
                   <span>Status:</span>
                   <StatusBadge status={selectedPO.status} size="sm" />
                 </div>
                 {selectedPO.delayReason ? (
-                  <p className="text-xs mt-1 text-white leading-relaxed">
+                  <p className="text-xs mt-1 text-white/90 leading-relaxed">
                     <strong>Identified Delay Root Cause:</strong> {selectedPO.delayReason}
                   </p>
                 ) : (
-                  <p className="text-xs mt-1 text-white">
+                  <p className="text-xs mt-1 text-white/80">
                     All transit waypoints are progressing according to SLA schedule.
                   </p>
                 )}
@@ -350,30 +352,30 @@ export const PurchaseOrdersPage: React.FC = () => {
 
             {/* Grid of Key Specifications */}
             <div className="grid grid-cols-2 gap-4">
-              <div className="p-3.5 rounded-xl neu-inset">
-                <span className="text-[11px] text-[#BEC7D5] uppercase tracking-wider block">
+              <div className="p-3.5 rounded-xl bg-black/40 border border-white/10">
+                <span className="text-[11px] text-white/50 uppercase tracking-wider block">
                   Material Item
                 </span>
-                <span className="font-bold text-sm text-white mt-1 block">
+                <span className="font-medium text-sm text-white mt-1 block">
                   {selectedPO.itemName}
                 </span>
-                <span className="text-xs font-mono text-[#BEC7D5]/70">{selectedPO.itemCode}</span>
+                <span className="text-xs font-mono text-white/40">{selectedPO.itemCode}</span>
               </div>
 
-              <div className="p-3.5 rounded-xl neu-inset">
-                <span className="text-[11px] text-[#BEC7D5] uppercase tracking-wider block">
+              <div className="p-3.5 rounded-xl bg-black/40 border border-white/10">
+                <span className="text-[11px] text-white/50 uppercase tracking-wider block">
                   Total Order Value
                 </span>
-                <span className="font-bold text-base font-mono text-white mt-1 block">
+                <span className="font-medium text-base font-mono text-white mt-1 block">
                   ${selectedPO.totalValue.toLocaleString()}
                 </span>
-                <span className="text-xs text-[#BEC7D5]">
+                <span className="text-xs text-white/60">
                   {selectedPO.quantity.toLocaleString()} {selectedPO.unit} @ ${selectedPO.unitPrice}/{selectedPO.unit}
                 </span>
               </div>
 
-              <div className="p-3.5 rounded-xl neu-inset">
-                <span className="text-[11px] text-[#BEC7D5] uppercase tracking-wider block">
+              <div className="p-3.5 rounded-xl bg-black/40 border border-white/10">
+                <span className="text-[11px] text-white/50 uppercase tracking-wider block">
                   Original Dock Date
                 </span>
                 <span className="font-mono text-sm text-white mt-1 block">
@@ -381,42 +383,44 @@ export const PurchaseOrdersPage: React.FC = () => {
                 </span>
               </div>
 
-              <div className="p-3.5 rounded-xl neu-inset">
-                <span className="text-[11px] text-[#BEC7D5] uppercase tracking-wider block">
+              <div className="p-3.5 rounded-xl bg-black/40 border border-white/10">
+                <span className="text-[11px] text-white/50 uppercase tracking-wider block">
                   Revised Expected Dock
                 </span>
-                <span className="font-mono text-sm text-[#921CC0] font-bold mt-1 block">
+                <span className={`font-mono text-sm font-medium mt-1 block ${
+                  selectedPO.status === 'critical' ? 'text-[#FF6B6B]' : selectedPO.status === 'delayed' ? 'text-[#E5A53D]' : 'text-white'
+                }`}>
                   {selectedPO.revisedDeliveryDate}
                 </span>
               </div>
             </div>
 
             {/* Carrier & Tracking Logistics Section */}
-            <div className="p-4 rounded-2xl glass-card space-y-3">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-white flex items-center gap-2">
-                <Truck className="w-4 h-4 text-primary" />
+            <div className="p-4 rounded-2xl liquid-glass space-y-3">
+              <h4 className="text-xs font-medium uppercase tracking-wider text-white flex items-center gap-2">
+                <Truck className="w-4 h-4 text-white/80" />
                 Freight Carrier Telemetry
               </h4>
 
               <div className="grid grid-cols-2 gap-3 text-xs">
                 <div>
-                  <span className="text-[#BEC7D5] block">Freight Carrier</span>
+                  <span className="text-white/50 block">Freight Carrier</span>
                   <span className="font-medium text-white">{selectedPO.carrier}</span>
                 </div>
                 <div>
-                  <span className="text-[#BEC7D5] block">Tracking Waybill #</span>
-                  <span className="font-mono text-primary font-bold">{selectedPO.trackingNumber}</span>
+                  <span className="text-white/50 block">Tracking Waybill #</span>
+                  <span className="font-mono text-white font-medium">{selectedPO.trackingNumber}</span>
                 </div>
               </div>
 
               <div className="pt-2">
                 <div className="flex justify-between text-xs mb-1.5">
-                  <span className="text-[#BEC7D5]">Transit Milestone Completion</span>
+                  <span className="text-white/60">Transit Milestone Completion</span>
                   <span className="font-mono text-white">{selectedPO.deliveryProgress}%</span>
                 </div>
-                <div className="h-2 w-full bg-black/50 rounded-full overflow-hidden">
+                <div className="h-2 w-full bg-black/60 rounded-full overflow-hidden border border-white/10">
                   <div
-                    className="h-full rounded-full bg-primary transition-all duration-500 shadow-[0_0_8px_rgba(45,226,230,0.6)]"
+                    className="h-full rounded-full bg-white transition-all duration-500 shadow-[0_0_8px_rgba(255,255,255,0.6)]"
                     style={{ width: `${selectedPO.deliveryProgress}%` }}
                   />
                 </div>
@@ -424,18 +428,18 @@ export const PurchaseOrdersPage: React.FC = () => {
             </div>
 
             {/* AI Recommendation Shortcut */}
-            <div className="p-4 rounded-2xl bg-gradient-to-r from-secondary/20 to-primary/10 border border-secondary/35 flex items-center justify-between">
+            <div className="p-4 rounded-2xl liquid-glass border border-white/20 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <Sparkles className="w-5 h-5 text-secondary" />
+                <Sparkles className="w-5 h-5 text-white/80" />
                 <div>
-                  <h5 className="text-xs font-bold text-white">AI Alternate Sourcing Available</h5>
-                  <p className="text-[11px] text-[#BEC7D5]">
+                  <h5 className="text-xs font-medium text-white">AI Alternate Sourcing Available</h5>
+                  <p className="text-[11px] text-white/60">
                     Mitigate delivery gap with pre-screened alternative vendor.
                   </p>
                 </div>
               </div>
               <NeumorphicButton
-                variant="raised"
+                variant="primary"
                 size="sm"
                 onClick={() => navigate('/recommendations')}
               >

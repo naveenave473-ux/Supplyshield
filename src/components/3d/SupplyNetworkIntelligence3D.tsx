@@ -496,7 +496,7 @@ export const SupplyNetworkIntelligence3D: React.FC = () => {
 
     // 1. Initialize Scene, Camera, Renderer
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x1d0445, 0.028); // Swatch 4: Midnight Void
+    scene.fog = new THREE.FogExp2(0x050505, 0.025);
 
     const width = mount.clientWidth;
     const height = mount.clientHeight;
@@ -519,54 +519,54 @@ export const SupplyNetworkIntelligence3D: React.FC = () => {
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.2;
+    renderer.toneMappingExposure = 1.1;
 
     while (mount.firstChild) {
       mount.removeChild(mount.firstChild);
     }
     mount.appendChild(renderer.domElement);
 
-    // 2. Lighting Setup with 7-Color Palette
-    const ambientLight = new THREE.AmbientLight(0x171665, 2.0); // Midnight Indigo
+    // 2. Lighting Setup (Monochrome Industrial Key, Rim, and Fill)
+    const ambientLight = new THREE.AmbientLight(0x222222, 2.2);
     scene.add(ambientLight);
 
-    const mainLight = new THREE.DirectionalLight(0xffffff, 1.4);
+    const mainLight = new THREE.DirectionalLight(0xffffff, 2.0);
     mainLight.position.set(10, 15, 12);
     scene.add(mainLight);
 
-    const cyanLight = new THREE.PointLight(0x0fd3f2, 3.8, 30); // Swatch 7: Neon Cyan
-    cyanLight.position.set(0, 4, 8);
-    scene.add(cyanLight);
+    const whitePointLight = new THREE.PointLight(0xffffff, 2.8, 30);
+    whitePointLight.position.set(0, 5, 8);
+    scene.add(whitePointLight);
 
-    const violetLight = new THREE.PointLight(0x921cc0, 3.2, 25); // Swatch 1: Electric Violet
-    violetLight.position.set(-6, -4, 6);
-    scene.add(violetLight);
+    const rimSilverLight = new THREE.PointLight(0xcccccc, 2.0, 25);
+    rimSilverLight.position.set(-8, -4, 6);
+    scene.add(rimSilverLight);
 
     // 3. Create Root Pivot Group for mouse orbital rotation
     const networkPivot = new THREE.Group();
     scene.add(networkPivot);
 
-    // Subtle Ground Grid Disk representing Midnight Void radar territory
+    // Deep Obsidian Ground Radar Grid Disk
     const radarDiskGeo = new THREE.RingGeometry(0.1, 11, 48);
     const radarDiskMat = new THREE.MeshBasicMaterial({
-      color: 0x1d0445,
+      color: 0x0a0a0a,
       side: THREE.DoubleSide,
       transparent: true,
-      opacity: 0.65,
+      opacity: 0.75,
     });
     const radarDisk = new THREE.Mesh(radarDiskGeo, radarDiskMat);
     radarDisk.rotation.x = Math.PI / 2;
     radarDisk.position.y = -1.2;
     networkPivot.add(radarDisk);
 
-    // Radar Concentric Grid Rings (Neon Cyan & Electric Violet)
+    // Radar Concentric Grid Rings (Translucent Monochrome Silver/White)
     [3.5, 6.5, 9.5].forEach((radius, idx) => {
-      const ringGeo = new THREE.RingGeometry(radius - 0.03, radius + 0.03, 64);
+      const ringGeo = new THREE.RingGeometry(radius - 0.02, radius + 0.02, 64);
       const ringMat = new THREE.MeshBasicMaterial({
-        color: idx % 2 === 0 ? 0x0fd3f2 : 0x921cc0,
+        color: idx % 2 === 0 ? 0xffffff : 0x888888,
         side: THREE.DoubleSide,
         transparent: true,
-        opacity: 0.25,
+        opacity: idx % 2 === 0 ? 0.2 : 0.1,
       });
       const ring = new THREE.Mesh(ringGeo, ringMat);
       ring.rotation.x = Math.PI / 2;
@@ -574,12 +574,12 @@ export const SupplyNetworkIntelligence3D: React.FC = () => {
       networkPivot.add(ring);
     });
 
-    // Color mapper using the 7-Color Palette
+    // Monochrome Industrial Color Mapper with restrained status accents
     const statusColors = {
-      critical: 0x921cc0, // Swatch 1: Electric Violet (#921CC0)
-      delayed: 0x4c128a,  // Swatch 2: Royal Violet (#4C128A)
-      healthy: 0x007cb8,  // Swatch 6: Cerulean Cyan (#007CB8)
-      mitigation: 0x0fd3f2, // Swatch 7: Bright Neon Cyan (#0FD3F2)
+      critical: 0xffffff, // Luminous white-hot pulse
+      delayed: 0xe5a53d,  // Muted amber variance
+      healthy: 0xd4d4d4,  // Polished chrome silver
+      mitigation: 0xffffff, // Pure white mitigation
     };
 
     // 4. Construct 3D Nodes
@@ -591,7 +591,7 @@ export const SupplyNetworkIntelligence3D: React.FC = () => {
       nodeDataMap.set(node.id, node);
       const isFactory = node.role === 'factory';
       const isMaterial = node.role === 'material';
-      const color = isFactory ? 0x0fd3f2 : statusColors[node.status];
+      const color = isFactory ? 0xffffff : statusColors[node.status];
 
       let geometry: THREE.BufferGeometry;
       if (isFactory) {
@@ -694,7 +694,7 @@ export const SupplyNetworkIntelligence3D: React.FC = () => {
       // Glowing animated data packets traveling along the route
       const packetGeo = new THREE.SphereGeometry(0.12, 12, 12);
       const packetMat = new THREE.MeshBasicMaterial({
-        color: route.status === 'critical' ? 0x921cc0 : 0x0fd3f2,
+        color: route.status === 'delayed' ? 0xe5a53d : 0xffffff,
       });
       const packetMesh = new THREE.Mesh(packetGeo, packetMat);
       networkPivot.add(packetMesh);
@@ -936,44 +936,44 @@ export const SupplyNetworkIntelligence3D: React.FC = () => {
 
   return (
     <div
-      className={`glass-panel rounded-2xl border border-white/[0.09] overflow-hidden transition-all duration-300 relative ${
-        isFullscreen ? 'fixed inset-4 z-50 shadow-2xl flex flex-col' : 'p-6'
+      className={`liquid-glass rounded-2xl overflow-hidden transition-all duration-300 relative ${
+        isFullscreen ? 'fixed inset-4 z-50 shadow-2xl flex flex-col liquid-glass-strong' : 'p-6'
       }`}
     >
       {/* Component Header with Branding & Interactive Toolbars */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-4 relative z-20">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-0.5 rounded-full bg-primary/15 text-primary border border-primary/30">
-              <Sparkles className="w-3.5 h-3.5" />
-              SIGNATURE 3D FEATURE
+            <span className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-0.5 rounded-full bg-white/[0.08] text-white border border-white/20">
+              <Sparkles className="w-3.5 h-3.5 text-white/80" />
+              DIGITAL TWIN
             </span>
-            <span className="text-xs text-[#BEC7D5] font-mono">
-              Detroit Assembly Plant Alpha • Telemetry Twin
+            <span className="text-xs text-white/55 font-mono">
+              Detroit Assembly Plant Alpha • 3D Telemetry
             </span>
           </div>
 
-          <h2 className="text-xl font-extrabold text-white tracking-tight flex items-center gap-2">
+          <h2 className="text-xl font-medium text-white tracking-tight flex items-center gap-2">
             Supply Network Intelligence
-            <span className="text-xs px-2 py-0.5 rounded bg-white/[0.06] text-[#BEC7D5] font-normal border border-white/[0.05]">
+            <span className="text-xs px-2 py-0.5 rounded bg-white/[0.06] text-white/70 font-normal border border-white/[0.08]">
               Interactive 3D Material Flow
             </span>
           </h2>
-          <p className="text-xs text-[#BEC7D5] mt-0.5">
-            Real-time orbital visualization of active purchase order transit routes, component buffers, and supplier risk bottlenecks.
+          <p className="text-xs text-white/60 mt-0.5">
+            Spatial digital twin of active purchase orders, component transit routes, and supplier delivery risk bottlenecks.
           </p>
         </div>
 
         {/* 3D Action Toolbar */}
         <div className="flex items-center gap-2 flex-wrap">
           {/* Route Filter Segmented Control */}
-          <div className="flex items-center rounded-xl p-1 bg-black/40 border border-white/[0.08] text-xs">
+          <div className="flex items-center rounded-xl p-1 bg-black/50 border border-white/10 text-xs">
             <button
               onClick={() => setFilterMode('all')}
               className={`px-2.5 py-1 rounded-lg font-medium transition-all ${
                 filterMode === 'all'
-                  ? 'bg-primary text-[#1D0445] font-bold shadow-[0_0_12px_rgba(15,211,242,0.45)]'
-                  : 'text-[#CBD5E1] hover:text-white'
+                  ? 'bg-white text-black font-semibold shadow-[0_0_12px_rgba(255,255,255,0.25)]'
+                  : 'text-white/70 hover:text-white'
               }`}
             >
               All Routes ({NETWORK_ROUTES.length})
@@ -982,8 +982,8 @@ export const SupplyNetworkIntelligence3D: React.FC = () => {
               onClick={() => setFilterMode('at-risk')}
               className={`px-2.5 py-1 rounded-lg font-medium transition-all ${
                 filterMode === 'at-risk'
-                  ? 'bg-[#921CC0] text-white font-bold shadow-[0_0_12px_rgba(146,28,192,0.45)]'
-                  : 'text-[#CBD5E1] hover:text-white'
+                  ? 'bg-white/25 text-white font-semibold border border-white/30 shadow-[0_0_12px_rgba(255,255,255,0.15)]'
+                  : 'text-white/70 hover:text-white'
               }`}
             >
               At-Risk (4)
@@ -992,8 +992,8 @@ export const SupplyNetworkIntelligence3D: React.FC = () => {
               onClick={() => setFilterMode('healthy')}
               className={`px-2.5 py-1 rounded-lg font-medium transition-all ${
                 filterMode === 'healthy'
-                  ? 'bg-[#007CB8] text-white font-bold shadow-[0_0_12px_rgba(0,124,184,0.45)]'
-                  : 'text-[#CBD5E1] hover:text-white'
+                  ? 'bg-white/25 text-white font-semibold border border-white/30 shadow-[0_0_12px_rgba(255,255,255,0.15)]'
+                  : 'text-white/70 hover:text-white'
               }`}
             >
               Healthy (3)
@@ -1004,9 +1004,9 @@ export const SupplyNetworkIntelligence3D: React.FC = () => {
           <button
             onClick={handleTogglePerspective}
             title={viewPerspective === '3d' ? 'Switch to Top-Down 2D Schematic' : 'Switch to 3D Perspective'}
-            className="p-2 rounded-xl bg-black/40 border border-white/[0.08] hover:border-primary/40 text-[#CBD5E1] hover:text-white transition-all text-xs flex items-center gap-1.5"
+            className="p-2 rounded-xl bg-black/50 border border-white/10 hover:border-white/30 text-white/70 hover:text-white transition-all text-xs flex items-center gap-1.5"
           >
-            <Layers className="w-3.5 h-3.5 text-primary" />
+            <Layers className="w-3.5 h-3.5 text-white" />
             <span className="hidden sm:inline font-mono">{viewPerspective.toUpperCase()}</span>
           </button>
 
@@ -1014,16 +1014,16 @@ export const SupplyNetworkIntelligence3D: React.FC = () => {
           <button
             onClick={() => setIsPaused(!isPaused)}
             title={isPaused ? 'Resume 3D Material Flow' : 'Pause 3D Material Flow'}
-            className="p-2 rounded-xl bg-black/40 border border-white/[0.08] hover:border-primary/40 text-[#CBD5E1] hover:text-white transition-all"
+            className="p-2 rounded-xl bg-black/50 border border-white/10 hover:border-white/30 text-white/70 hover:text-white transition-all"
           >
-            {isPaused ? <Play className="w-3.5 h-3.5 text-[#0FD3F2]" /> : <Pause className="w-3.5 h-3.5" />}
+            {isPaused ? <Play className="w-3.5 h-3.5 text-white" /> : <Pause className="w-3.5 h-3.5" />}
           </button>
 
           {/* Reset View */}
           <button
             onClick={handleResetView}
             title="Reset Camera View to Default"
-            className="p-2 rounded-xl bg-black/40 border border-white/[0.08] hover:border-primary/40 text-[#CBD5E1] hover:text-white transition-all"
+            className="p-2 rounded-xl bg-black/50 border border-white/10 hover:border-white/30 text-white/70 hover:text-white transition-all"
           >
             <RotateCcw className="w-3.5 h-3.5" />
           </button>
@@ -1034,8 +1034,8 @@ export const SupplyNetworkIntelligence3D: React.FC = () => {
             title="Toggle Accessible Data Table View"
             className={`p-2 rounded-xl border transition-all text-xs flex items-center gap-1.5 ${
               showTableView
-                ? 'bg-primary/20 border-primary text-primary'
-                : 'bg-black/40 border-white/[0.08] text-[#CBD5E1] hover:text-white'
+                ? 'bg-white/20 border-white/40 text-white shadow-[0_0_12px_rgba(255,255,255,0.15)]'
+                : 'bg-black/50 border-white/10 text-white/70 hover:text-white'
             }`}
           >
             <Eye className="w-3.5 h-3.5" />
@@ -1046,99 +1046,99 @@ export const SupplyNetworkIntelligence3D: React.FC = () => {
           <button
             onClick={() => setIsFullscreen(!isFullscreen)}
             title={isFullscreen ? 'Exit Fullscreen' : 'Expand Fullscreen'}
-            className="p-2 rounded-xl bg-black/40 border border-white/[0.08] hover:border-primary/40 text-[#CBD5E1] hover:text-white transition-all"
+            className="p-2 rounded-xl bg-black/50 border border-white/10 hover:border-white/30 text-white/70 hover:text-white transition-all"
           >
             {isFullscreen ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
           </button>
         </div>
       </div>
 
-      {/* Main 3D Canvas Area with Glass HUD Overlays */}
-      <div className={`relative w-full rounded-xl overflow-hidden bg-[#1D0445] border border-white/[0.06] ${
+      {/* Main 3D Canvas Area with Liquid Glass HUD Overlays */}
+      <div className={`relative w-full rounded-xl overflow-hidden bg-[#070707] border border-white/[0.08] ${
         isFullscreen ? 'flex-1 min-h-0' : 'h-[500px]'
       }`}>
         {/* Three.js Canvas Container */}
         <div ref={mountRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
 
         {/* Top-Left Status Legend Badge Overlay */}
-        <div className="absolute top-3 left-3 bg-[#171665]/90 backdrop-blur-md p-3 rounded-xl border border-white/[0.08] pointer-events-none space-y-1.5 text-[11px] shadow-lg">
-          <div className="text-[10px] uppercase tracking-wider text-[#CBD5E1] font-semibold mb-1">
+        <div className="dark-hud absolute top-3 left-3 p-3 rounded-xl border border-palette-cyan/30 pointer-events-none space-y-1.5 text-[11px] shadow-lg">
+          <div className="text-[10px] uppercase tracking-wider text-palette-cyan font-mono mb-1 font-semibold">
             Telemetry Key
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#921CC0] animate-pulse" />
-            <span className="text-white font-medium">Critical Delay (Electric Violet)</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#4C128A]" />
-            <span className="text-[#CBD5E1]">Delivery Variance (Royal Violet)</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)] animate-pulse" />
+            <span className="text-white font-medium">Critical Delay (White-Hot Pulse)</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-[#007CB8]" />
-            <span className="text-[#0FD3F2] font-medium">Healthy In-Transit (Cerulean)</span>
+            <span className="text-white/90">Delivery Variance (Cerulean Cyan)</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#0FD3F2]" />
-            <span className="text-[#0FD3F2]">AI Mitigation (Neon Cyan)</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-[#921CC0]" />
+            <span className="text-white/90 font-medium">High Exposure (Electric Magenta)</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#0FD3F2] ring-1 ring-[#0FD3F2]/50" />
+            <span className="text-palette-cyan font-medium">AI Mitigation Route (Neon Cyan)</span>
           </div>
         </div>
 
         {/* Bottom-Left Controls Instruction Hint */}
-        <div className="absolute bottom-3 left-3 bg-[#1D0445]/85 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-[#4C128A]/40 pointer-events-none text-[11px] text-[#BEC7D5] flex items-center gap-2 font-mono">
-          <span>Click & Drag: Rotate</span>
-          <span>•</span>
-          <span>Scroll: Zoom</span>
-          <span>•</span>
-          <span className="text-primary font-bold">Click Node: Inspect Details</span>
+        <div className="dark-hud absolute bottom-3 left-3 backdrop-blur-md px-3.5 py-1.5 rounded-lg border border-palette-cyan/30 pointer-events-none text-[11px] text-white/90 flex items-center gap-2 font-mono shadow-lg">
+          <span>Click & Drag: <strong className="text-palette-cyan font-semibold">Rotate</strong></span>
+          <span className="text-white/40">•</span>
+          <span>Scroll: <strong className="text-palette-cyan font-semibold">Zoom</strong></span>
+          <span className="text-white/40">•</span>
+          <span className="text-palette-cyan font-bold">Click Node: Inspect Details</span>
         </div>
 
         {/* Hover Floating HUD Tooltip */}
         {hoveredNode && !selectedNode && !selectedRoute && (
-          <div className="absolute top-3 right-3 bg-[#171665]/95 backdrop-blur-md p-3.5 rounded-xl border border-primary/40 shadow-[0_0_24px_rgba(15,211,242,0.22)] pointer-events-none max-w-xs animate-in fade-in zoom-in-95 duration-200">
+          <div className="absolute top-3 right-3 liquid-glass-strong p-3.5 rounded-xl border border-white/25 shadow-[0_12px_36px_rgba(0,0,0,0.85)] pointer-events-none max-w-xs animate-in fade-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between gap-2 mb-1">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-primary font-bold">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-white font-semibold">
                 {hoveredNode.role.toUpperCase()}
               </span>
               <StatusBadge status={hoveredNode.status} size="sm" />
             </div>
-            <h4 className="text-sm font-bold text-white">{hoveredNode.name}</h4>
-            <p className="text-xs text-[#BEC7D5] mt-0.5">{hoveredNode.location}, {hoveredNode.country}</p>
+            <h4 className="text-sm font-medium text-white">{hoveredNode.name}</h4>
+            <p className="text-xs text-white/60 mt-0.5">{hoveredNode.location}, {hoveredNode.country}</p>
 
             {hoveredNode.materialName && (
               <p className="text-xs text-white mt-1.5 font-mono">
-                Component: <strong className="text-primary">{hoveredNode.materialName}</strong>
+                Component: <strong className="text-white">{hoveredNode.materialName}</strong>
               </p>
             )}
 
             <div className="mt-2 pt-2 border-t border-white/[0.08] flex justify-between text-[11px]">
-              <span className="text-[#BEC7D5]/70">Risk Score:</span>
-              <span className="font-mono text-white font-bold">{hoveredNode.riskScore}/100</span>
+              <span className="text-white/50">Risk Score:</span>
+              <span className="font-mono text-white font-medium">{hoveredNode.riskScore}/100</span>
             </div>
           </div>
         )}
 
         {/* Node Detail Drawer / Flyout Panel */}
         {selectedNode && (
-          <div className="absolute top-3 right-3 bottom-3 w-80 sm:w-96 bg-[#171665]/98 backdrop-blur-xl p-5 rounded-2xl border border-primary/40 shadow-[0_0_35px_rgba(0,0,0,0.7)] overflow-y-auto z-30 animate-in slide-in-from-right duration-300">
+          <div className="absolute top-3 right-3 bottom-3 w-80 sm:w-96 liquid-glass-strong p-5 rounded-2xl border border-white/20 shadow-[0_20px_60px_rgba(0,0,0,0.9)] overflow-y-auto z-30 animate-in slide-in-from-right duration-300">
             <div className="flex items-center justify-between pb-3 border-b border-white/[0.08] mb-4">
               <div className="flex items-center gap-2">
                 {selectedNode.role === 'factory' ? (
-                  <Factory className="w-5 h-5 text-primary" />
+                  <Factory className="w-5 h-5 text-white" />
                 ) : (
-                  <Truck className="w-5 h-5 text-primary" />
+                  <Truck className="w-5 h-5 text-white" />
                 )}
                 <div>
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-primary block">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-white/60 block">
                     {selectedNode.role === 'factory' ? 'Central Production Node' : 'Tier Sourcing Node'}
                   </span>
-                  <h3 className="text-sm font-bold text-white leading-tight">
+                  <h3 className="text-sm font-medium text-white leading-tight">
                     {selectedNode.name}
                   </h3>
                 </div>
               </div>
               <button
                 onClick={() => setSelectedNode(null)}
-                className="p-1 rounded-lg hover:bg-white/10 text-[#BEC7D5] hover:text-white transition-colors"
+                className="p-1 rounded-lg hover:bg-white/10 text-white/60 hover:text-white transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1146,54 +1146,54 @@ export const SupplyNetworkIntelligence3D: React.FC = () => {
 
             <div className="space-y-4 text-xs">
               <div>
-                <span className="text-[#BEC7D5]/70 block text-[11px]">Status Telemetry</span>
+                <span className="text-white/50 block text-[11px]">Status Telemetry</span>
                 <div className="flex items-center justify-between mt-1">
                   <StatusBadge status={selectedNode.status} size="md" />
-                  <span className="font-mono font-bold text-white">
+                  <span className="font-mono font-medium text-white">
                     Risk Score: {selectedNode.riskScore}/100
                   </span>
                 </div>
               </div>
 
-              <div className="p-3 rounded-xl bg-black/40 border border-white/[0.06] space-y-1.5">
+              <div className="p-3 rounded-xl bg-black/40 border border-white/[0.08] space-y-1.5">
                 <div className="flex justify-between">
-                  <span className="text-[#BEC7D5]">Location:</span>
+                  <span className="text-white/60">Location:</span>
                   <span className="font-mono text-white font-medium">{selectedNode.location}, {selectedNode.country}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[#BEC7D5]">Lead Time:</span>
+                  <span className="text-white/60">Lead Time:</span>
                   <span className="font-mono text-white font-medium">{selectedNode.leadTime} days</span>
                 </div>
                 {selectedNode.activePoNumber && (
                   <div className="flex justify-between">
-                    <span className="text-[#BEC7D5]">Active PO:</span>
-                    <span className="font-mono text-primary font-bold">{selectedNode.activePoNumber}</span>
+                    <span className="text-white/60">Active PO:</span>
+                    <span className="font-mono text-white font-medium">{selectedNode.activePoNumber}</span>
                   </div>
                 )}
                 {selectedNode.materialName && (
                   <div className="flex justify-between">
-                    <span className="text-[#BEC7D5]">Monitored Material:</span>
+                    <span className="text-white/60">Monitored Material:</span>
                     <span className="font-mono text-white">{selectedNode.materialName}</span>
                   </div>
                 )}
               </div>
 
               {selectedNode.disruptionSummary && (
-                <div className="p-3 rounded-xl bg-[#921CC0]/15 border border-[#921CC0]/35 space-y-1">
-                  <div className="flex items-center gap-1.5 text-[#921CC0] font-bold">
-                    <AlertTriangle className="w-4 h-4" />
+                <div className="p-3 rounded-xl bg-white/[0.04] border border-white/15 space-y-1">
+                  <div className="flex items-center gap-1.5 text-white font-medium">
+                    <AlertTriangle className="w-4 h-4 text-[#FF6B6B]" />
                     <span>Disruption Telemetry</span>
                   </div>
-                  <p className="text-white leading-relaxed">
+                  <p className="text-white/90 leading-relaxed">
                     {selectedNode.disruptionSummary}
                   </p>
                 </div>
               )}
 
               {selectedNode.financialExposure && (
-                <div className="p-3 rounded-xl bg-white/[0.04] border border-white/[0.06]">
-                  <span className="text-[#CBD5E1] block text-[11px]">Calculated Exposure</span>
-                  <span className="font-mono font-bold text-sm text-[#921CC0] block mt-0.5">
+                <div className="p-3 rounded-xl bg-white/[0.04] border border-white/[0.08]">
+                  <span className="text-white/60 block text-[11px]">Calculated Exposure</span>
+                  <span className="font-mono font-medium text-sm text-white block mt-0.5">
                     {selectedNode.financialExposure}
                   </span>
                 </div>
@@ -1215,9 +1215,9 @@ export const SupplyNetworkIntelligence3D: React.FC = () => {
 
                 {selectedNode.status === 'critical' && (
                   <NeumorphicButton
-                    variant="raised"
+                    variant="secondary"
                     size="sm"
-                    className="w-full text-xs text-primary"
+                    className="w-full text-xs text-white"
                     onClick={() => navigate('/recommendations')}
                     leftIcon={<Sparkles className="w-3.5 h-3.5" />}
                   >
@@ -1231,22 +1231,22 @@ export const SupplyNetworkIntelligence3D: React.FC = () => {
 
         {/* Route Detail Drawer / Flyout Panel */}
         {selectedRoute && (
-          <div className="absolute top-3 right-3 bottom-3 w-80 sm:w-96 bg-[#171665]/98 backdrop-blur-xl p-5 rounded-2xl border border-primary/30 shadow-[0_0_35px_rgba(0,0,0,0.7)] overflow-y-auto z-30 animate-in slide-in-from-right duration-300">
+          <div className="absolute top-3 right-3 bottom-3 w-80 sm:w-96 liquid-glass-strong p-5 rounded-2xl border border-white/20 shadow-[0_20px_60px_rgba(0,0,0,0.9)] overflow-y-auto z-30 animate-in slide-in-from-right duration-300">
             <div className="flex items-center justify-between pb-3 border-b border-white/[0.08] mb-4">
               <div className="flex items-center gap-2">
-                <Package className="w-5 h-5 text-primary" />
+                <Package className="w-5 h-5 text-white" />
                 <div>
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-primary block">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-white/60 block">
                     Transit Route Telemetry
                   </span>
-                  <h3 className="text-sm font-bold text-white leading-tight">
+                  <h3 className="text-sm font-medium text-white leading-tight">
                     {selectedRoute.poNumber} • {selectedRoute.itemName}
                   </h3>
                 </div>
               </div>
               <button
                 onClick={() => setSelectedRoute(null)}
-                className="p-1 rounded-lg hover:bg-white/10 text-[#CBD5E1] hover:text-white transition-colors"
+                className="p-1 rounded-lg hover:bg-white/10 text-white/60 hover:text-white transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1260,10 +1260,10 @@ export const SupplyNetworkIntelligence3D: React.FC = () => {
                 </span>
               </div>
 
-              <div className="p-3 rounded-xl bg-black/40 border border-white/[0.06] space-y-1.5">
+              <div className="p-3 rounded-xl bg-black/40 border border-white/[0.08] space-y-1.5">
                 <div className="flex justify-between">
-                  <span className="text-[#CBD5E1]">Estimated Deviation:</span>
-                  <span className="font-mono text-[#921CC0] font-bold">
+                  <span className="text-white/60">Estimated Deviation:</span>
+                  <span className="font-mono font-medium text-white">
                     {selectedRoute.estimatedDelayDays > 0
                       ? `+${selectedRoute.estimatedDelayDays} days slip`
                       : selectedRoute.estimatedDelayDays < 0
@@ -1273,11 +1273,11 @@ export const SupplyNetworkIntelligence3D: React.FC = () => {
                 </div>
               </div>
 
-              <div className="p-3 rounded-xl bg-[#1D0445] border border-primary/30 space-y-1">
-                <span className="font-bold text-primary flex items-center gap-1.5">
-                  <Info className="w-4 h-4" /> Root Cause Diagnosis
+              <div className="p-3 rounded-xl bg-white/[0.04] border border-white/15 space-y-1">
+                <span className="font-medium text-white flex items-center gap-1.5">
+                  <Info className="w-4 h-4 text-white/70" /> Root Cause Diagnosis
                 </span>
-                <p className="text-white leading-relaxed">{selectedRoute.rootCause}</p>
+                <p className="text-white/90 leading-relaxed">{selectedRoute.rootCause}</p>
               </div>
 
               <div className="pt-2">
@@ -1298,13 +1298,13 @@ export const SupplyNetworkIntelligence3D: React.FC = () => {
 
       {/* Accessible Alternative Data View (For screen readers and high-contrast table users) */}
       {showTableView && (
-        <div className="mt-4 p-4 rounded-xl bg-[#171665] border border-[#CBD5E1]/15 animate-in fade-in duration-200">
+        <div className="mt-4 p-4 rounded-xl liquid-glass border border-white/15 animate-in fade-in duration-200">
           <div className="flex items-center justify-between mb-3">
-            <h4 className="text-sm font-bold text-white flex items-center gap-2">
-              <Layers className="w-4 h-4 text-primary" />
+            <h4 className="text-sm font-medium text-white flex items-center gap-2">
+              <Layers className="w-4 h-4 text-white" />
               Accessible Supply Network Data Matrix
             </h4>
-            <span className="text-xs text-[#CBD5E1] font-mono">
+            <span className="text-xs text-white/60 font-mono">
               7 Active Monitored Nodes
             </span>
           </div>
@@ -1312,7 +1312,7 @@ export const SupplyNetworkIntelligence3D: React.FC = () => {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="border-b border-white/[0.08] text-[#CBD5E1]/70">
+                <tr className="border-b border-white/[0.08] text-white/50 font-mono">
                   <th className="py-2 px-3">Node / Partner</th>
                   <th className="py-2 px-3">Role</th>
                   <th className="py-2 px-3">Status</th>
@@ -1327,17 +1327,17 @@ export const SupplyNetworkIntelligence3D: React.FC = () => {
                   <tr
                     key={n.id}
                     onClick={() => setSelectedNode(n)}
-                    className="hover:bg-white/[0.03] cursor-pointer transition-colors"
+                    className="hover:bg-white/[0.04] cursor-pointer transition-colors"
                   >
                     <td className="py-2.5 px-3 font-medium text-white">{n.name}</td>
-                    <td className="py-2.5 px-3 font-mono text-primary uppercase">{n.role}</td>
+                    <td className="py-2.5 px-3 font-mono text-white/80 uppercase">{n.role}</td>
                     <td className="py-2.5 px-3">
                       <StatusBadge status={n.status} size="sm" />
                     </td>
-                    <td className="py-2.5 px-3 text-[#CBD5E1]">{n.location}, {n.country}</td>
-                    <td className="py-2.5 px-3 font-mono">{n.leadTime}d</td>
-                    <td className="py-2.5 px-3 font-mono font-bold text-white">{n.riskScore}/100</td>
-                    <td className="py-2.5 px-3 text-[#CBD5E1] max-w-xs truncate">
+                    <td className="py-2.5 px-3 text-white/70">{n.location}, {n.country}</td>
+                    <td className="py-2.5 px-3 font-mono text-white/80">{n.leadTime}d</td>
+                    <td className="py-2.5 px-3 font-mono font-medium text-white">{n.riskScore}/100</td>
+                    <td className="py-2.5 px-3 text-white/70 max-w-xs truncate">
                       {n.disruptionSummary || 'Nominal operational status'}
                     </td>
                   </tr>
@@ -1348,13 +1348,13 @@ export const SupplyNetworkIntelligence3D: React.FC = () => {
 
           {/* Active Monitored Transit Routes Matrix */}
           <div className="mt-4 pt-3 border-t border-white/[0.06]">
-            <h5 className="text-xs font-bold text-white mb-2 font-mono uppercase tracking-wider text-primary">
+            <h5 className="text-xs font-medium text-white mb-2 font-mono uppercase tracking-wider">
               Monitored Transit Paths & Purchase Orders ({filteredRoutes.length})
             </h5>
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
-                  <tr className="border-b border-white/[0.08] text-[#CBD5E1]/70">
+                  <tr className="border-b border-white/[0.08] text-white/50 font-mono">
                     <th className="py-2 px-3">Route PO</th>
                     <th className="py-2 px-3">Material Item</th>
                     <th className="py-2 px-3">Status</th>
@@ -1368,24 +1368,24 @@ export const SupplyNetworkIntelligence3D: React.FC = () => {
                     <tr
                       key={r.id}
                       onClick={() => setSelectedRoute(r)}
-                      className="hover:bg-white/[0.03] cursor-pointer transition-colors"
+                      className="hover:bg-white/[0.04] cursor-pointer transition-colors"
                     >
-                      <td className="py-2 px-3 font-mono text-primary font-bold">{r.poNumber}</td>
-                      <td className="py-2 px-3 text-white">{r.itemName}</td>
+                      <td className="py-2 px-3 font-mono text-white font-medium">{r.poNumber}</td>
+                      <td className="py-2 px-3 text-white/90">{r.itemName}</td>
                       <td className="py-2 px-3">
                         <StatusBadge status={r.status} size="sm" />
                       </td>
-                      <td className="py-2 px-3 font-mono text-[#CBD5E1]">{r.quantity}</td>
-                      <td className="py-2 px-3 font-mono font-bold">
+                      <td className="py-2 px-3 font-mono text-white/70">{r.quantity}</td>
+                      <td className="py-2 px-3 font-mono font-medium">
                         {r.estimatedDelayDays > 0 ? (
-                          <span className="text-[#921CC0]">+{r.estimatedDelayDays}d delay</span>
+                          <span className="text-[#FF6B6B]">+{r.estimatedDelayDays}d delay</span>
                         ) : r.estimatedDelayDays < 0 ? (
-                          <span className="text-primary">{r.estimatedDelayDays}d expedited</span>
+                          <span className="text-white font-semibold">{r.estimatedDelayDays}d expedited</span>
                         ) : (
-                          <span className="text-[#007CB8]">On Schedule</span>
+                          <span className="text-[#3DD598]">On Schedule</span>
                         )}
                       </td>
-                      <td className="py-2 px-3 text-[#CBD5E1] max-w-sm truncate">{r.rootCause}</td>
+                      <td className="py-2 px-3 text-white/70 max-w-sm truncate">{r.rootCause}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -1396,12 +1396,12 @@ export const SupplyNetworkIntelligence3D: React.FC = () => {
       )}
 
       {/* Demo Simulation Disclaimer Footer */}
-      <div className="mt-3 flex items-center justify-between text-[11px] text-[#BEC7D5]/70 border-t border-white/[0.04] pt-2">
-        <span className="flex items-center gap-1.5">
-          <Info className="w-3.5 h-3.5 text-primary" />
-          Demonstration Simulation Data: Synthetic topology representing manufacturing intake for Detroit Assembly Plant Alpha.
+      <div className="canvas-disclaimer mt-3 flex items-center justify-between text-[11px] text-white/85 border-t border-white/[0.08] pt-2">
+        <span className="flex items-center gap-1.5 text-white/90">
+          <Info className="w-3.5 h-3.5 text-palette-cyan flex-shrink-0" />
+          <span>Demonstration Simulation Data: Synthetic topology representing manufacturing intake for Detroit Assembly Plant Alpha.</span>
         </span>
-        <span className="font-mono text-[#BEC7D5]">WebGL 2.0 • 60 FPS Engine</span>
+        <span className="font-mono text-palette-cyan/90 bg-palette-void/70 px-2.5 py-0.5 rounded-md border border-palette-cyan/30 shadow-glow-cyan/10">WebGL 2.0 • 60 FPS Engine</span>
       </div>
     </div>
   );

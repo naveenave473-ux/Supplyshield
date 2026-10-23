@@ -695,10 +695,10 @@ export const deliveryPerformanceChartData = [
 ];
 
 export const supplierRiskDistributionData = [
-  { name: 'Low Risk (Tier 1)', value: 42, color: '#0FD3F2' }, // Neon Cyan
-  { name: 'Medium Risk', value: 28, color: '#007CB8' },       // Ocean Cerulean
-  { name: 'High Risk', value: 18, color: '#4C128A' },         // Royal Violet
-  { name: 'Critical Risk', value: 12, color: '#921CC0' }      // Electric Violet
+  { name: 'Low Risk (Tier 1)', value: 42, color: '#3DD598' }, // Nominal Emerald
+  { name: 'Medium Risk', value: 28, color: '#E5E5E5' },       // Silver Chrome
+  { name: 'High Risk', value: 18, color: '#E5A53D' },         // Warning Amber
+  { name: 'Critical Risk', value: 12, color: '#FF6B6B' }      // Critical Coral
 ];
 
 export const inventoryCoverageDemandData = [

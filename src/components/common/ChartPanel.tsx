@@ -17,15 +17,15 @@ export const ChartPanel: React.FC<ChartPanelProps> = ({
 }) => {
   return (
     <div
-      className={`glass-panel p-5 rounded-2xl border border-white/[0.08] flex flex-col justify-between ${className}`}
+      className={`liquid-glass p-5 rounded-2xl flex flex-col justify-between ${className}`}
     >
       <div className="flex items-start justify-between mb-4 gap-4">
         <div>
-          <h4 className="text-base font-semibold text-white tracking-tight">
+          <h4 className="text-base font-medium text-white tracking-tight">
             {title}
           </h4>
           {subtitle && (
-            <p className="text-xs text-[#BEC7D5] mt-0.5">{subtitle}</p>
+            <p className="text-xs text-white/55 mt-0.5">{subtitle}</p>
           )}
         </div>
         {headerAction && <div>{headerAction}</div>}
@@ -52,17 +52,17 @@ export const CustomChartTooltip = ({
 }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-[#171665]/95 backdrop-blur-md border border-[#4C128A]/40 rounded-xl p-3 shadow-[0_8px_24px_rgba(0,0,0,0.6)] text-xs z-50">
-        {label && <p className="font-semibold text-white mb-2">{label}</p>}
+      <div className="bg-[#0B0B0B]/95 backdrop-blur-xl border border-white/20 rounded-xl p-3 shadow-[0_12px_32px_rgba(0,0,0,0.85)] text-xs z-50">
+        {label && <p className="font-medium text-white mb-2 font-mono">{label}</p>}
         <div className="space-y-1.5">
           {payload.map((entry, idx) => (
             <div key={idx} className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-1.5">
                 <span
                   className="w-2 h-2 rounded-full"
-                  style={{ backgroundColor: entry.color || '#0FD3F2' }}
+                  style={{ backgroundColor: entry.color || '#FFFFFF' }}
                 />
-                <span className="text-[#BEC7D5]">{entry.name}:</span>
+                <span className="text-white/70">{entry.name}:</span>
               </div>
               <span className="font-mono font-medium text-white">
                 {valuePrefix}

@@ -7,6 +7,8 @@ import {
   Send,
   DollarSign,
   FileCheck,
+  ShieldCheck,
+  TrendingDown,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { PageHeader } from '../components/common/PageHeader';
@@ -27,7 +29,7 @@ export const RecommendationsPage: React.FC = () => {
     );
     const rec = recommendations.find((r) => r.id === recId);
     setActionFeedback(
-      `Mitigation plan for "${rec?.targetMaterialName}" activated in ERP staging queue.`
+      `Mitigation plan for "${rec?.targetMaterialName}" activated in ERP staging queue (Simulated Execution).`
     );
     setTimeout(() => setActionFeedback(null), 5000);
   };
@@ -47,59 +49,59 @@ export const RecommendationsPage: React.FC = () => {
       />
 
       {actionFeedback && (
-        <div className="p-4 rounded-2xl bg-[#0FD3F2]/20 border border-[#0FD3F2]/50 text-[#0FD3F2] flex items-center justify-between text-xs animate-in fade-in duration-200 shadow-[0_0_20px_rgba(15,211,242,0.2)]">
+        <div className="p-4 rounded-2xl liquid-glass border border-palette-cyan/40 text-white flex items-center justify-between text-xs animate-in fade-in duration-200 shadow-glow-cyan/20">
           <div className="flex items-center gap-2.5">
-            <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
-            <span className="font-bold text-sm text-white">{actionFeedback}</span>
+            <CheckCircle2 className="w-5 h-5 text-palette-cyan flex-shrink-0" />
+            <span className="font-medium text-sm text-white">{actionFeedback}</span>
           </div>
           <button
             onClick={() => setActionFeedback(null)}
-            className="text-white hover:text-[#0FD3F2] font-bold px-3 py-1 rounded-lg bg-black/30"
+            className="text-white/70 hover:text-white font-medium px-3 py-1 rounded-lg bg-palette-cyan/10 hover:bg-palette-cyan/20 border border-palette-cyan/30 transition-all"
           >
             Dismiss
           </button>
         </div>
       )}
 
-      {/* Summary Metrics Bar with High-Contrast Typography */}
+      {/* Summary Metrics Bar */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-        <GlassCard className="p-5 flex items-center gap-4 hud-bracket">
-          <div className="p-3.5 rounded-2xl bg-[#0FD3F2]/15 text-[#0FD3F2] border border-[#0FD3F2]/35 shadow-[0_0_15px_rgba(15,211,242,0.3)]">
+        <GlassCard className="p-5 flex items-center gap-4 hover:border-palette-cyan/30 transition-all">
+          <div className="p-3.5 rounded-2xl bg-palette-indigo/30 text-palette-cyan border border-palette-cyan/30">
             <Sparkles className="w-6 h-6 animate-pulse" />
           </div>
           <div>
-            <span className="text-xs font-tech font-bold uppercase tracking-wider text-[#CBD5E1] block">
+            <span className="text-xs font-semibold uppercase tracking-wider text-white/60 block">
               Active AI Mitigation Plans
             </span>
-            <span className="font-mono text-2xl font-black text-white mt-0.5 block">
+            <span className="font-mono text-2xl font-bold text-palette-cyan mt-0.5 block">
               {recommendations.filter((r) => r.status === 'active').length} Ready
             </span>
           </div>
         </GlassCard>
 
-        <GlassCard className="p-5 flex items-center gap-4 hud-bracket">
-          <div className="p-3.5 rounded-2xl bg-[#007CB8]/20 text-[#0FD3F2] border border-[#007CB8]/35 shadow-[0_0_15px_rgba(0,124,184,0.3)]">
+        <GlassCard className="p-5 flex items-center gap-4 hover:border-palette-magenta/30 transition-all">
+          <div className="p-3.5 rounded-2xl bg-palette-royal/20 text-palette-magenta border border-palette-magenta/30">
             <DollarSign className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-xs font-tech font-bold uppercase tracking-wider text-[#CBD5E1] block">
+            <span className="text-xs font-semibold uppercase tracking-wider text-white/60 block">
               Protected Factory Stoppage Value
             </span>
-            <span className="font-mono text-2xl font-black text-[#0FD3F2] mt-0.5 block">
+            <span className="font-mono text-2xl font-bold bg-gradient-to-r from-palette-magenta to-palette-cerulean bg-clip-text text-transparent mt-0.5 block">
               $515,000 Total
             </span>
           </div>
         </GlassCard>
 
-        <GlassCard className="p-5 flex items-center gap-4 hud-bracket">
-          <div className="p-3.5 rounded-2xl bg-[#921CC0]/15 text-[#921CC0] border border-[#921CC0]/35 shadow-[0_0_15px_rgba(146,28,192,0.3)]">
+        <GlassCard className="p-5 flex items-center gap-4 hover:border-palette-cerulean/30 transition-all">
+          <div className="p-3.5 rounded-2xl bg-palette-cobalt/20 text-palette-cerulean border border-palette-cerulean/30">
             <Clock className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-xs font-tech font-bold uppercase tracking-wider text-[#CBD5E1] block">
+            <span className="text-xs font-semibold uppercase tracking-wider text-white/60 block">
               Average Lead Time Saved
             </span>
-            <span className="font-mono text-2xl font-black text-white mt-0.5 block">
+            <span className="font-mono text-2xl font-bold text-palette-cerulean mt-0.5 block">
               25.6 Days
             </span>
           </div>
@@ -107,7 +109,7 @@ export const RecommendationsPage: React.FC = () => {
       </div>
 
       {/* Recommendations Cards List */}
-      <div className="space-y-8">
+      <div className="space-y-6">
         {recommendations.map((rec) => {
           const isApplied = rec.status === 'applied';
           const isDismissed = rec.status === 'dismissed';
@@ -117,10 +119,10 @@ export const RecommendationsPage: React.FC = () => {
           return (
             <GlassPanel
               key={rec.id}
-              className={`p-6 sm:p-8 border transition-all duration-300 hud-bracket ${
+              className={`p-6 sm:p-8 transition-all duration-300 ${
                 isApplied
-                  ? 'border-[#0FD3F2]/50 bg-[#1D0445]/95 shadow-[0_0_30px_rgba(15,211,242,0.2)]'
-                  : 'border-white/[0.14] hover:border-[#0FD3F2]/50 shadow-xl'
+                  ? 'border-palette-cyan/40 bg-palette-indigo/10 shadow-glow-cyan/15'
+                  : 'border-white/10 hover:border-palette-cyan/30 hover:shadow-glow-cyan/10'
               }`}
             >
               <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-8">
@@ -128,56 +130,58 @@ export const RecommendationsPage: React.FC = () => {
                 <div className="flex-1 space-y-6">
                   {/* Badges Bar */}
                   <div className="flex items-center gap-2.5 flex-wrap">
-                    <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-md bg-[#0FD3F2]/15 text-[#0FD3F2] border border-[#0FD3F2]/40">
+                    <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-md bg-palette-midnight/80 text-palette-cyan border border-palette-cyan/30">
                       {rec.id}
                     </span>
-                    <span className="text-xs font-mono font-semibold text-[#CBD5E1] px-2.5 py-1 rounded-md bg-white/[0.05] border border-white/10">
+                    <span className="text-xs font-mono text-white/70 px-2.5 py-1 rounded-md bg-white/[0.04] border border-white/10">
                       Target SKU: {rec.targetMaterialSku}
                     </span>
-                    <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-md bg-[#921CC0]/20 text-[#921CC0] border border-[#921CC0]/40">
+                    <span className="text-xs font-mono font-medium px-2.5 py-1 rounded-md bg-palette-indigo/30 text-palette-cyan border border-palette-cyan/20 flex items-center gap-1.5">
+                      <ShieldCheck className="w-3.5 h-3.5 text-palette-cyan" />
                       Confidence: {rec.confidence}%
                     </span>
                     {isApplied && (
-                      <span className="text-xs font-tech font-extrabold px-3 py-1 rounded-full bg-[#0FD3F2]/25 text-[#0FD3F2] border border-[#0FD3F2]/50 shadow-[0_0_12px_rgba(15,211,242,0.4)]">
+                      <span className="text-xs font-mono font-semibold px-3 py-1 rounded-full bg-gradient-to-r from-palette-cyan via-palette-cerulean to-palette-magenta text-white shadow-glow-cyan">
                         APPLIED TO WORKSPACE
                       </span>
                     )}
                   </div>
 
                   {/* Recommendation Title */}
-                  <h3 className="text-xl sm:text-2xl font-display font-black text-white tracking-tight leading-snug">
+                  <h3 className="text-xl sm:text-2xl font-semibold text-white tracking-tight leading-snug">
                     {rec.title}
                   </h3>
 
                   {/* Comparison pill grid */}
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
-                    <div className="p-3.5 rounded-2xl neu-inset border border-white/10">
-                      <span className="text-[11px] font-tech font-bold uppercase tracking-wider text-[#CBD5E1] block">
+                    <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-palette-cyan/30 transition-all">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-white/60 block">
                         Compatibility
                       </span>
-                      <span className="font-mono font-black text-base sm:text-lg text-[#0FD3F2] mt-1 block">
+                      <span className="font-mono font-bold text-base sm:text-lg text-palette-cyan mt-1 block">
                         {rec.compatibilityScore}% Spec Match
                       </span>
                     </div>
 
-                    <div className="p-3.5 rounded-2xl neu-inset border border-white/10">
-                      <span className="text-[11px] font-tech font-bold uppercase tracking-wider text-[#CBD5E1] block">
+                    <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-palette-cyan/30 transition-all">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-white/60 block">
                         Lead Time Delta
                       </span>
-                      <span className="font-mono font-black text-base sm:text-lg text-[#0FD3F2] mt-1 block">
-                        -{rec.leadTimeImprovementDays} Days Faster
+                      <span className="font-mono font-bold text-base sm:text-lg text-palette-cyan mt-1 block flex items-center gap-1">
+                        <TrendingDown className="w-4 h-4 text-palette-cyan" />
+                        -{rec.leadTimeImprovementDays} Days
                       </span>
                     </div>
 
-                    <div className="p-3.5 rounded-2xl neu-inset border border-white/10">
-                      <span className="text-[11px] font-tech font-bold uppercase tracking-wider text-[#CBD5E1] block">
+                    <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-palette-magenta/30 transition-all">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-white/60 block">
                         Unit Price Variance
                       </span>
                       <span
-                        className={`font-mono font-black text-base sm:text-lg mt-1 block ${
+                        className={`font-mono font-bold text-base sm:text-lg mt-1 block ${
                           rec.costVariancePercent <= 0
-                            ? 'text-[#0FD3F2]'
-                            : 'text-[#4C128A]'
+                            ? 'text-palette-cyan'
+                            : 'text-palette-magenta'
                         }`}
                       >
                         {rec.costVariancePercent > 0 ? '+' : ''}
@@ -185,51 +189,51 @@ export const RecommendationsPage: React.FC = () => {
                       </span>
                     </div>
 
-                    <div className="p-3.5 rounded-2xl neu-inset border border-white/10">
-                      <span className="text-[11px] font-tech font-bold uppercase tracking-wider text-[#CBD5E1] block">
+                    <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-palette-cerulean/30 transition-all">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-white/60 block">
                         Capacity Buffer
                       </span>
-                      <span className="font-mono font-black text-base sm:text-lg text-white mt-1 block">
+                      <span className="font-mono font-bold text-base sm:text-lg text-white mt-1 block">
                         {rec.capacityAvailable}
                       </span>
                     </div>
                   </div>
 
                   {/* Current vs Alternative Supplier Comparison */}
-                  <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs">
+                  <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs">
                     <div>
-                      <span className="text-[#CBD5E1] block text-[11px] font-tech font-bold uppercase tracking-wider mb-0.5">
+                      <span className="text-white/50 block text-[11px] font-semibold uppercase tracking-wider mb-0.5">
                         Current Sourcing Bottleneck
                       </span>
-                      <span className="text-[#921CC0] font-bold text-sm">
+                      <span className="text-palette-magenta font-semibold text-sm">
                         {rec.currentSupplier}
                       </span>
                     </div>
 
-                    <div className="flex items-center justify-center p-2 rounded-full bg-white/[0.04]">
-                      <ArrowRight className="w-4 h-4 text-[#0FD3F2]" />
+                    <div className="flex items-center justify-center p-2 rounded-full bg-palette-indigo/40 border border-palette-cyan/20">
+                      <ArrowRight className="w-4 h-4 text-palette-cyan" />
                     </div>
 
                     <div>
-                      <span className="text-[#CBD5E1] block text-[11px] font-tech font-bold uppercase tracking-wider mb-0.5">
+                      <span className="text-white/50 block text-[11px] font-semibold uppercase tracking-wider mb-0.5">
                         Recommended Alternative
                       </span>
-                      <span className="text-[#0FD3F2] font-bold text-sm">
+                      <span className="text-palette-cyan font-semibold text-sm">
                         {rec.recommendedSupplier}
                       </span>
                     </div>
                   </div>
 
-                  {/* AI Rationale Bullets with Ultra-Crisp Visibility */}
+                  {/* AI Rationale Bullets */}
                   <div className="space-y-3 pt-2">
-                    <span className="text-xs font-tech font-bold uppercase tracking-wider text-white block">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-white/80 block">
                       Recommendation Rationale & Verification
                     </span>
-                    <ul className="space-y-2 text-xs font-sans">
+                    <ul className="space-y-2 text-xs">
                       {rec.rationale.map((point, idx) => (
-                        <li key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.07] hover:border-white/15 transition-all">
-                          <CheckCircle2 className="w-4 h-4 text-[#0FD3F2] flex-shrink-0 mt-0.5" />
-                          <span className="leading-relaxed text-[#F1F5F9] font-medium text-xs sm:text-sm">
+                        <li key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.06] hover:border-palette-cyan/20 transition-all">
+                          <CheckCircle2 className="w-4 h-4 text-palette-cyan flex-shrink-0 mt-0.5" />
+                          <span className="leading-relaxed text-white/80 font-normal text-xs sm:text-sm">
                             {point}
                           </span>
                         </li>
@@ -239,12 +243,12 @@ export const RecommendationsPage: React.FC = () => {
                 </div>
 
                 {/* Right side CTA panel */}
-                <div className="flex flex-col gap-3 min-w-[220px] w-full lg:w-auto border-t lg:border-t-0 lg:border-l border-white/[0.12] pt-6 lg:pt-0 lg:pl-8 justify-center">
-                  <div className="p-4 rounded-2xl neu-inset border border-white/10 text-center mb-1">
-                    <span className="text-[11px] font-tech font-bold uppercase tracking-wider text-[#CBD5E1] block">
+                <div className="flex flex-col gap-3 min-w-[220px] w-full lg:w-auto border-t lg:border-t-0 lg:border-l border-white/10 pt-6 lg:pt-0 lg:pl-8 justify-center">
+                  <div className="p-4 rounded-2xl bg-palette-midnight/60 border border-palette-cyan/30 text-center mb-1 shadow-glow-cyan/10">
+                    <span className="text-[11px] font-semibold uppercase tracking-wider text-palette-cyan/80 block">
                       Protected Stoppage Value
                     </span>
-                    <span className="font-mono text-xl sm:text-2xl font-black text-[#0FD3F2] mt-1 block">
+                    <span className="font-mono text-xl sm:text-2xl font-bold bg-gradient-to-r from-palette-cyan via-palette-cerulean to-palette-magenta bg-clip-text text-transparent mt-1 block">
                       +${rec.potentialSavings.toLocaleString()}
                     </span>
                   </div>
@@ -255,7 +259,7 @@ export const RecommendationsPage: React.FC = () => {
                         variant="primary"
                         size="md"
                         onClick={() => handleApplyRecommendation(rec.id)}
-                        className="w-full text-sm font-extrabold"
+                        className="w-full text-sm font-semibold"
                       >
                         Apply Sourcing Plan
                       </NeumorphicButton>
@@ -272,24 +276,24 @@ export const RecommendationsPage: React.FC = () => {
                             )}`
                           );
                         }}
-                        leftIcon={<Send className="w-4 h-4 text-[#0FD3F2]" />}
-                        className="w-full text-xs font-bold"
+                        leftIcon={<Send className="w-4 h-4 text-white/70" />}
+                        className="w-full text-xs font-medium"
                       >
                         Contact Supplier
                       </NeumorphicButton>
 
                       <button
                         onClick={() => handleDismiss(rec.id)}
-                        className="w-full text-xs font-semibold text-[#CBD5E1] hover:text-white hover:bg-white/[0.08] rounded-xl py-2.5 transition-all"
+                        className="w-full text-xs font-medium text-white/60 hover:text-white hover:bg-white/[0.06] rounded-xl py-2.5 transition-all"
                       >
                         Dismiss Plan
                       </button>
                     </>
                   ) : (
-                    <div className="p-4 rounded-2xl bg-[#0FD3F2]/20 border border-[#0FD3F2]/40 text-center shadow-[0_0_20px_rgba(15,211,242,0.2)]">
-                      <FileCheck className="w-8 h-8 text-[#0FD3F2] mx-auto mb-1.5" />
-                      <span className="text-sm font-bold text-white block">Plan Active</span>
-                      <span className="text-xs text-[#CBD5E1]">Staged for PO conversion</span>
+                    <div className="p-4 rounded-2xl bg-white/[0.04] border border-white/20 text-center shadow-lg">
+                      <FileCheck className="w-8 h-8 text-white mx-auto mb-1.5" />
+                      <span className="text-sm font-semibold text-white block">Plan Active</span>
+                      <span className="text-xs text-white/60">Staged for PO conversion</span>
                     </div>
                   )}
                 </div>

@@ -9,16 +9,21 @@ export const AppLayout: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
-  return (
-    <div className="min-h-screen bg-[#1D0445] text-[#FFFFFF] flex relative overflow-x-hidden font-sans">
-      {/* 3D WebGL Background Scene (Shield, constellation, orbital rings) */}
-      <Background3DScene />
+  React.useEffect(() => {
+    const handleToggle = () => setIsSidebarOpen((prev) => !prev);
+    const handleOpen = () => setIsSidebarOpen(true);
+    window.addEventListener('toggle-sidebar', handleToggle);
+    window.addEventListener('open-sidebar', handleOpen);
+    return () => {
+      window.removeEventListener('toggle-sidebar', handleToggle);
+      window.removeEventListener('open-sidebar', handleOpen);
+    };
+  }, []);
 
-      {/* Ambient Radial Lights with 7-Color Palette */}
-      <div className="fixed top-0 left-1/4 w-[520px] h-[520px] bg-[#0FD3F2]/[0.08] rounded-full blur-[130px] pointer-events-none -z-10" />
-      <div className="fixed bottom-0 right-10 w-[620px] h-[620px] bg-[#921CC0]/[0.08] rounded-full blur-[150px] pointer-events-none -z-10" />
-      <div className="fixed top-1/2 right-1/3 w-[460px] h-[460px] bg-[#4C128A]/[0.06] rounded-full blur-[140px] pointer-events-none -z-10" />
-      <div className="fixed bottom-1/4 left-10 w-[420px] h-[420px] bg-[#082495]/[0.06] rounded-full blur-[140px] pointer-events-none -z-10" />
+  return (
+    <div className="min-h-screen bg-transparent text-[#FFFFFF] flex relative overflow-x-hidden font-sans selection:bg-white/20 selection:text-white">
+      {/* 3D WebGL & Spinning Particle Globe Background Scene */}
+      <Background3DScene />
 
       {/* Sidebar Navigation */}
       <Sidebar

@@ -8,11 +8,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        // The 7 Signature Palette Swatches:
-        // 1: #921CC0 (Electric Violet)
+        // The 7 Signature Feather Palette Swatches:
+        // 1: #921CC0 (Electric Violet / Magenta)
         // 2: #4C128A (Royal Violet)
         // 3: #171665 (Midnight Indigo)
-        // 4: #1D0445 (Midnight Void Dark Purple)
+        // 4: #1D0445 (Midnight Void Dark Plum)
         // 5: #082495 (Cobalt Blue)
         // 6: #007CB8 (Cerulean Cyan)
         // 7: #0FD3F2 (Bright Neon Cyan)
@@ -25,88 +25,93 @@ export default {
           cerulean: '#007CB8',
           cyan: '#0FD3F2',
         },
-        background: {
-          DEFAULT: '#1D0445', // Swatch 4: Midnight Void
-          secondary: '#171665', // Swatch 3: Midnight Indigo
-          tertiary: '#4C128A', // Swatch 2: Royal Violet
-        },
         primary: {
-          DEFAULT: '#0FD3F2', // Swatch 7: Bright Neon Cyan
-          hover: '#4AE1F7',
-          dark: '#007CB8', // Swatch 6: Cerulean Cyan
+          DEFAULT: '#0FD3F2',
+          hover: '#35DCF5',
+          dark: '#007CB8',
+          muted: 'rgba(15, 211, 242, 0.70)',
         },
         secondary: {
-          DEFAULT: '#921CC0', // Swatch 1: Electric Violet
-          hover: '#B53DE5',
-          dark: '#4C128A', // Swatch 2: Royal Violet
+          DEFAULT: '#921CC0',
+          hover: '#A929DB',
+          dark: '#4C128A',
+          muted: 'rgba(146, 28, 192, 0.70)',
         },
         accent: {
-          cyan: '#0FD3F2',     // Swatch 7
-          cerulean: '#007CB8', // Swatch 6
-          cobalt: '#082495',   // Swatch 5
-          void: '#1D0445',     // Swatch 4
-          indigo: '#171665',   // Swatch 3
-          royal: '#4C128A',    // Swatch 2
-          violet: '#921CC0',   // Swatch 1
-          silver: '#CBD5E1',   // High-contrast slate typography
+          cyan: '#0FD3F2',
+          cerulean: '#007CB8',
+          cobalt: '#082495',
+          void: '#1D0445',
+          indigo: '#171665',
+          royal: '#4C128A',
+          violet: '#921CC0',
+          silver: '#CBD5E1',
+        },
+        background: {
+          DEFAULT: '#1D0445',
+          secondary: '#171665',
+          tertiary: '#4C128A',
         },
         text: {
           main: '#FFFFFF',
           secondary: '#CBD5E1',
           muted: '#94A3B8',
+          faint: 'rgba(255, 255, 255, 0.35)',
         },
         status: {
-          success: '#0FD3F2', // Neon Cyan
-          'success-bg': 'rgba(15, 211, 242, 0.15)',
-          'success-border': 'rgba(15, 211, 242, 0.35)',
-          warning: '#007CB8', // Cerulean
-          'warning-bg': 'rgba(0, 124, 184, 0.15)',
-          'warning-border': 'rgba(0, 124, 184, 0.35)',
-          critical: '#921CC0', // Electric Violet
-          'critical-bg': 'rgba(146, 28, 192, 0.18)',
-          'critical-border': 'rgba(146, 28, 192, 0.45)',
+          critical: '#921CC0',
+          'critical-bg': 'rgba(146, 28, 192, 0.16)',
+          'critical-border': 'rgba(146, 28, 192, 0.40)',
+          warning: '#007CB8',
+          'warning-bg': 'rgba(0, 124, 184, 0.16)',
+          'warning-border': 'rgba(0, 124, 184, 0.40)',
+          success: '#0FD3F2',
+          'success-bg': 'rgba(15, 211, 242, 0.16)',
+          'success-border': 'rgba(15, 211, 242, 0.40)',
           info: '#0FD3F2',
           'info-bg': 'rgba(15, 211, 242, 0.12)',
-          'info-border': 'rgba(15, 211, 242, 0.3)',
+          'info-border': 'rgba(15, 211, 242, 0.35)',
         },
         glass: {
-          base: 'rgba(23, 22, 101, 0.82)', // Midnight Indigo Glass
-          surface: 'rgba(29, 4, 69, 0.85)', // Midnight Void Glass
-          elevated: 'rgba(76, 18, 138, 0.75)', // Royal Violet Glass
-          border: 'rgba(15, 211, 242, 0.16)', // Neon Cyan fine border
-          'border-focus': 'rgba(15, 211, 242, 0.65)',
-          'border-highlight': 'rgba(146, 28, 192, 0.35)',
+          base: 'rgba(23, 22, 101, 0.55)',
+          surface: 'rgba(29, 4, 69, 0.50)',
+          elevated: 'rgba(76, 18, 138, 0.45)',
+          light: 'rgba(15, 211, 242, 0.06)',
+          strong: 'rgba(29, 4, 69, 0.65)',
+          border: 'rgba(15, 211, 242, 0.20)',
+          'border-highlight': 'rgba(146, 28, 192, 0.40)',
+          'border-subtle': 'rgba(15, 211, 242, 0.10)',
         }
       },
       boxShadow: {
-        'glass-sm': '0 4px 16px rgba(0, 0, 0, 0.4)',
-        'glass-md': '0 8px 32px rgba(0, 0, 0, 0.55)',
-        'glass-lg': '0 14px 44px rgba(0, 0, 0, 0.7)',
-        'neu-raised': '4px 4px 12px rgba(0, 0, 0, 0.65), -2px -2px 8px rgba(15, 211, 242, 0.08)',
-        'neu-raised-sm': '2px 2px 8px rgba(0, 0, 0, 0.55), -1px -1px 4px rgba(15, 211, 242, 0.05)',
-        'neu-raised-hover': '5px 5px 16px rgba(0, 0, 0, 0.75), -3px -3px 10px rgba(15, 211, 242, 0.15)',
-        'neu-inset': 'inset 2px 2px 6px rgba(0, 0, 0, 0.8), inset -2px -2px 6px rgba(146, 28, 192, 0.05)',
-        'neu-inset-focus': 'inset 2px 2px 6px rgba(0, 0, 0, 0.85), 0 0 16px rgba(15, 211, 242, 0.4)',
-        'glow-cyan': '0 0 28px rgba(15, 211, 242, 0.4)',
-        'glow-violet': '0 0 28px rgba(146, 28, 192, 0.4)',
-        'glow-cobalt': '0 0 28px rgba(8, 36, 149, 0.4)',
-        'glow-cyan-sm': '0 0 14px rgba(15, 211, 242, 0.3)',
+        'glass-sm': '0 4px 16px rgba(0, 0, 0, 0.6)',
+        'glass-md': '0 8px 32px rgba(0, 0, 0, 0.7)',
+        'glass-lg': '0 16px 48px rgba(0, 0, 0, 0.85)',
+        'liquid-inset': 'inset 0 1px 1px 0 rgba(255, 255, 255, 0.16)',
+        'liquid-strong-inset': 'inset 0 1px 1px 0 rgba(255, 255, 255, 0.24), inset 0 -1px 1px 0 rgba(0, 0, 0, 0.5)',
+        'glow-subtle': '0 0 24px rgba(15, 211, 242, 0.15)',
+        'glow-pill': '0 0 14px rgba(15, 211, 242, 0.25)',
+        'glow-cyan': '0 0 24px rgba(15, 211, 242, 0.45)',
+        'glow-violet': '0 0 24px rgba(146, 28, 192, 0.45)',
+        'glow-feather': '0 0 30px rgba(15, 211, 242, 0.25), 0 0 45px rgba(146, 28, 192, 0.25)',
       },
       borderRadius: {
-        'glass-sm': '12px',
-        'glass-md': '18px',
-        'glass-lg': '24px',
+        'glass-sm': '10px',
+        'glass-md': '14px',
+        'glass-lg': '16px',
+        'glass-xl': '24px',
       },
       backdropBlur: {
         'xs': '4px',
-        'glass': '18px',
-        'glass-lg': '24px',
+        'glass': '16px',
+        'glass-strong': '40px',
       },
       fontFamily: {
-        display: ['Syne', 'system-ui', 'sans-serif'],
-        tech: ['Space Grotesk', 'system-ui', 'sans-serif'],
-        sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
-        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+        sans: ['Poppins', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        serif: ['"Source Serif 4"', 'Georgia', 'serif'],
+        mono: ['"JetBrains Mono"', 'Fira Code', 'monospace'],
+        display: ['Poppins', 'sans-serif'],
+        tech: ['Poppins', 'sans-serif'],
       }
     },
   },

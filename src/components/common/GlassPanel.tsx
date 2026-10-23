@@ -3,8 +3,8 @@ import React from 'react';
 interface GlassPanelProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   className?: string;
-  variant?: 'default' | 'surface' | 'elevated' | 'modal';
-  glow?: 'none' | 'cyan' | 'violet';
+  variant?: 'default' | 'surface' | 'elevated' | 'modal' | 'strong';
+  glow?: 'none' | 'cyan' | 'violet' | 'white';
 }
 
 export const GlassPanel: React.FC<GlassPanelProps> = ({
@@ -15,21 +15,23 @@ export const GlassPanel: React.FC<GlassPanelProps> = ({
   ...props
 }) => {
   const variantStyles = {
-    default: 'glass-panel',
-    surface: 'bg-[#0f172a]/65 backdrop-blur-[16px] border border-white/[0.08] shadow-[0_6px_24px_rgba(0,0,0,0.25)]',
-    elevated: 'bg-[#16223a]/75 backdrop-blur-[20px] border border-white/[0.12] shadow-[0_12px_36px_rgba(0,0,0,0.4)]',
-    modal: 'bg-[#0d1424]/92 backdrop-blur-[24px] border border-white/[0.12] shadow-[0_20px_50px_rgba(0,0,0,0.6)]',
+    default: 'liquid-glass',
+    surface: 'bg-[#0B0B0B]/80 backdrop-blur-[20px] border border-white/[0.08] shadow-[0_8px_30px_rgba(0,0,0,0.6)]',
+    elevated: 'bg-[#141414]/80 backdrop-blur-[24px] border border-white/[0.12] shadow-[0_14px_40px_rgba(0,0,0,0.7)]',
+    modal: 'liquid-glass-strong shadow-[0_24px_64px_rgba(0,0,0,0.9)]',
+    strong: 'liquid-glass-strong',
   };
 
   const glowStyles = {
     none: '',
-    cyan: 'shadow-[0_0_28px_rgba(53,191,255,0.22)]',
-    violet: 'shadow-[0_0_28px_rgba(139,124,255,0.22)]',
+    cyan: 'shadow-[0_0_24px_rgba(255,255,255,0.12)]',
+    violet: 'shadow-[0_0_24px_rgba(255,255,255,0.12)]',
+    white: 'shadow-[0_0_28px_rgba(255,255,255,0.14)]',
   };
 
   return (
     <div
-      className={`rounded-2xl transition-all duration-200 ${variantStyles[variant]} ${glowStyles[glow]} ${className}`}
+      className={`rounded-2xl transition-all duration-300 ${variantStyles[variant]} ${glowStyles[glow]} ${className}`}
       {...props}
     >
       {children}

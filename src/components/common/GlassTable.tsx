@@ -36,18 +36,18 @@ export function GlassTable<T>({
   className = '',
 }: GlassTableProps<T>) {
   return (
-    <div className={`w-full overflow-hidden rounded-2xl glass-panel border border-[#4C128A]/40 bg-[#171665]/60 ${className}`}>
+    <div className={`w-full overflow-hidden rounded-2xl liquid-glass border border-white/[0.08] ${className}`}>
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse text-sm">
           <thead>
-            <tr className="border-b border-[#4C128A]/40 bg-[#1D0445]/90 text-xs uppercase tracking-wider text-[#BEC7D5]">
+            <tr className="border-b border-white/[0.08] bg-white/[0.03] text-xs uppercase tracking-wider text-white/60 font-mono">
               {columns.map((col) => {
                 const isSorted = sortColumn === col.key;
                 return (
                   <th
                     key={col.key}
                     style={{ width: col.width }}
-                    className={`px-5 py-3.5 font-semibold ${
+                    className={`px-5 py-3.5 font-medium ${
                       col.align === 'right'
                         ? 'text-right'
                         : col.align === 'center'
@@ -69,15 +69,15 @@ export function GlassTable<T>({
                     >
                       <span>{col.header}</span>
                       {col.sortable && (
-                        <span className="text-[#BEC7D5]/70">
+                        <span className="text-white/40">
                           {isSorted ? (
                             sortDirection === 'asc' ? (
-                              <ChevronUp className="w-3.5 h-3.5 text-primary" />
+                              <ChevronUp className="w-3.5 h-3.5 text-white" />
                             ) : (
-                              <ChevronDown className="w-3.5 h-3.5 text-primary" />
+                              <ChevronDown className="w-3.5 h-3.5 text-white" />
                             )
                           ) : (
-                            <ChevronsUpDown className="w-3.5 h-3.5 opacity-50" />
+                            <ChevronsUpDown className="w-3.5 h-3.5 opacity-40" />
                           )}
                         </span>
                       )}
@@ -102,7 +102,7 @@ export function GlassTable<T>({
               <tr>
                 <td
                   colSpan={columns.length}
-                  className="px-5 py-12 text-center text-[#BEC7D5]"
+                  className="px-5 py-12 text-center text-white/50"
                 >
                   <p className="text-sm">{emptyMessage}</p>
                 </td>
@@ -112,16 +112,16 @@ export function GlassTable<T>({
                 <tr
                   key={keyExtractor(item)}
                   onClick={() => onRowClick && onRowClick(item)}
-                  className={`group transition-colors duration-150 ${
+                  className={`group transition-all duration-150 ${
                     onRowClick
-                      ? 'cursor-pointer hover:bg-white/[0.04] active:bg-white/[0.06]'
+                      ? 'cursor-pointer hover:bg-white/[0.05] active:bg-white/[0.08]'
                       : 'hover:bg-white/[0.02]'
                   }`}
                 >
                   {columns.map((col) => (
                     <td
                       key={col.key}
-                      className={`px-5 py-4 text-white font-normal ${
+                      className={`px-5 py-4 text-white/90 font-normal ${
                         col.align === 'right'
                           ? 'text-right'
                           : col.align === 'center'

@@ -16,10 +16,10 @@ export const GlassCard: React.FC<GlassCardProps> = ({
 }) => {
   return (
     <div
-      className={`glass-card p-5 relative overflow-hidden ${
-        interactive ? 'glass-card-hover cursor-pointer' : ''
+      className={`liquid-glass p-5 relative overflow-hidden ${
+        interactive ? 'hover:border-white/25 hover:shadow-[0_12px_36px_rgba(0,0,0,0.8),0_0_20px_rgba(255,255,255,0.06)] hover:-translate-y-0.5 cursor-pointer' : ''
       } ${
-        selected ? 'border-primary/50 shadow-[0_0_24px_rgba(53,191,255,0.22)] ring-1 ring-primary/40' : ''
+        selected ? 'border-white/40 shadow-[0_0_24px_rgba(255,255,255,0.15)] ring-1 ring-white/30' : ''
       } ${className}`}
       {...props}
     >

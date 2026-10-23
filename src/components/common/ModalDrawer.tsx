@@ -43,21 +43,21 @@ export const ModalDrawer: React.FC<ModalDrawerProps> = ({
 
   if (variant === 'modal') {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
         <div
-          className={`w-full ${width} rounded-3xl glass-panel bg-[#171665]/95 border border-[#4C128A]/50 shadow-[0_25px_60px_rgba(0,0,0,0.7)] overflow-hidden flex flex-col max-h-[90vh]`}
+          className={`w-full ${width} rounded-3xl liquid-glass-strong border border-white/20 shadow-[0_30px_80px_rgba(0,0,0,0.95)] overflow-hidden flex flex-col max-h-[90vh]`}
         >
           {/* Header */}
-          <div className="px-6 py-5 border-b border-[#4C128A]/40 flex items-center justify-between bg-[#1D0445]/90">
+          <div className="px-6 py-5 border-b border-white/[0.08] flex items-center justify-between bg-black/40">
             <div>
-              <h3 className="text-lg font-bold text-white tracking-tight">{title}</h3>
-              {subtitle && <p className="text-xs text-[#BEC7D5] mt-0.5">{subtitle}</p>}
+              <h3 className="text-lg font-medium text-white tracking-tight">{title}</h3>
+              {subtitle && <p className="text-xs text-white/55 mt-0.5">{subtitle}</p>}
             </div>
             <NeumorphicButton
-              variant="raised"
+              variant="secondary"
               size="icon"
               onClick={onClose}
-              className="text-[#BEC7D5] hover:text-white"
+              className="text-white/70 hover:text-white"
             >
               <X className="w-4 h-4" />
             </NeumorphicButton>
@@ -68,7 +68,7 @@ export const ModalDrawer: React.FC<ModalDrawerProps> = ({
 
           {/* Footer */}
           {footer && (
-            <div className="px-6 py-4 border-t border-[#4C128A]/40 bg-[#1D0445]/90 flex items-center justify-end gap-3">
+            <div className="px-6 py-4 border-t border-white/[0.08] bg-black/40 flex items-center justify-end gap-3">
               {footer}
             </div>
           )}
@@ -79,23 +79,23 @@ export const ModalDrawer: React.FC<ModalDrawerProps> = ({
 
   // Drawer variant (slide in from right)
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden bg-black/60 backdrop-blur-sm transition-opacity duration-300">
+    <div className="fixed inset-0 z-50 overflow-hidden bg-black/75 backdrop-blur-sm transition-opacity duration-300">
       <div className="absolute inset-0" onClick={onClose} />
       <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
         <div
-          className={`w-screen ${width} glass-drawer bg-[#171665]/98 border-l border-[#4C128A]/50 shadow-[-16px_0_48px_rgba(0,0,0,0.6)] flex flex-col overflow-hidden animate-in slide-in-from-right duration-300`}
+          className={`w-screen ${width} liquid-glass-strong border-l border-white/20 shadow-[-20px_0_60px_rgba(0,0,0,0.9)] flex flex-col overflow-hidden animate-in slide-in-from-right duration-300`}
         >
           {/* Header */}
-          <div className="px-6 py-5 border-b border-[#4C128A]/40 flex items-start justify-between bg-[#1D0445]/90">
+          <div className="px-6 py-5 border-b border-white/[0.08] flex items-start justify-between bg-black/40">
             <div>
-              <h3 className="text-lg font-bold text-white tracking-tight">{title}</h3>
-              {subtitle && <p className="text-xs text-[#BEC7D5] mt-0.5">{subtitle}</p>}
+              <h3 className="text-lg font-medium text-white tracking-tight">{title}</h3>
+              {subtitle && <p className="text-xs text-white/55 mt-0.5">{subtitle}</p>}
             </div>
             <NeumorphicButton
-              variant="raised"
+              variant="secondary"
               size="icon"
               onClick={onClose}
-              className="text-[#BEC7D5] hover:text-white"
+              className="text-white/70 hover:text-white"
             >
               <X className="w-4 h-4" />
             </NeumorphicButton>
@@ -106,7 +106,7 @@ export const ModalDrawer: React.FC<ModalDrawerProps> = ({
 
           {/* Footer */}
           {footer && (
-            <div className="px-6 py-4 border-t border-[#4C128A]/40 bg-[#1D0445]/90 flex items-center justify-end gap-3">
+            <div className="px-6 py-4 border-t border-white/[0.08] bg-black/40 flex items-center justify-end gap-3">
               {footer}
             </div>
           )}

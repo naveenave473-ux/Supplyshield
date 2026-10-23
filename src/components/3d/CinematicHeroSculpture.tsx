@@ -20,7 +20,7 @@ const SUPPLIER_NODES: SupplierNodeData[] = [
     component: 'Automotive Power MOSFETs',
     status: 'nominal',
     leadTimeVariance: 'On Schedule (SLA 98.4%)',
-    color: 0x0fd3f2, // Swatch 7: Bright Neon Cyan
+    color: 0x3DD598, // Nominal SLA
     position: [-3.8, 1.8, 1.2],
   },
   {
@@ -30,7 +30,7 @@ const SUPPLIER_NODES: SupplierNodeData[] = [
     component: 'STM32 Microcontrollers',
     status: 'critical',
     leadTimeVariance: '+17.4 Days Delay [PORT BACKLOG]',
-    color: 0x921cc0, // Swatch 1: Electric Violet
+    color: 0xFF6B6B, // Critical Risk
     position: [3.6, 2.2, -1.0],
   },
   {
@@ -40,7 +40,7 @@ const SUPPLIER_NODES: SupplierNodeData[] = [
     component: 'Structural Aluminum Housings',
     status: 'critical',
     leadTimeVariance: '+14.1 Days Delay [TOOLING CHURN]',
-    color: 0x4c128a, // Swatch 2: Royal Violet
+    color: 0xFF6B6B, // Critical Risk
     position: [-2.9, -2.4, 1.5],
   },
   {
@@ -50,7 +50,7 @@ const SUPPLIER_NODES: SupplierNodeData[] = [
     component: 'LiDAR Optical Transceivers',
     status: 'nominal',
     leadTimeVariance: 'Normal (+0.4 Days)',
-    color: 0x007cb8, // Swatch 6: Cerulean Cyan
+    color: 0xE5E5E5, // Chrome Silver
     position: [3.4, -1.9, 1.6],
   },
   {
@@ -60,7 +60,7 @@ const SUPPLIER_NODES: SupplierNodeData[] = [
     component: 'Pre-vetted Drop-in Replacement',
     status: 'alternative',
     leadTimeVariance: 'Ready for Expedited Air (3 Days)',
-    color: 0x0fd3f2, // Swatch 7: Bright Neon Cyan
+    color: 0xFFFFFF, // Pure White
     position: [0.2, 3.4, -1.8],
   },
   {
@@ -70,7 +70,7 @@ const SUPPLIER_NODES: SupplierNodeData[] = [
     component: 'Multi-layer Flex PCBs',
     status: 'nominal',
     leadTimeVariance: 'Dock ETA: Tomorrow 08:00',
-    color: 0x082495, // Swatch 5: Cobalt Blue
+    color: 0xCCCCCC, // Silver Metallic
     position: [-3.6, -0.2, -2.2],
   },
 ];
@@ -589,9 +589,9 @@ export const CinematicHeroSculpture: React.FC<CinematicHeroSculptureProps> = ({
   if (!hasWebGL) {
     return (
       <div className={`relative flex items-center justify-center p-8 ${className}`}>
-        <div className="w-80 h-80 rounded-full border-2 border-[#0FD3F2]/30 bg-gradient-to-tr from-[#0FD3F2]/10 to-[#921CC0]/10 flex items-center justify-center animate-pulse">
-          <div className="w-48 h-48 rounded-full border border-[#007CB8]/40 flex items-center justify-center">
-            <span className="text-xs font-mono text-[#0FD3F2] uppercase tracking-wider">
+        <div className="w-80 h-80 rounded-full border border-white/20 bg-white/[0.04] flex items-center justify-center animate-pulse">
+          <div className="w-48 h-48 rounded-full border border-white/10 flex items-center justify-center">
+            <span className="text-xs font-mono text-white/80 uppercase tracking-wider">
               3D Telemetry Active
             </span>
           </div>
@@ -610,8 +610,7 @@ export const CinematicHeroSculpture: React.FC<CinematicHeroSculptureProps> = ({
       style={{ touchAction: 'none' }}
     >
       {/* 3D Atmospheric Radial Glows behind centerpiece */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[340px] h-[340px] bg-[#0FD3F2]/15 rounded-full blur-[90px] pointer-events-none -z-10" />
-      <div className="absolute top-1/3 left-1/3 w-[280px] h-[280px] bg-[#921CC0]/15 rounded-full blur-[100px] pointer-events-none -z-10" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[340px] h-[340px] bg-white/[0.04] rounded-full blur-[90px] pointer-events-none -z-10" />
 
       {/* Floating 3D Node Holographic Tooltip */}
       {hoveredNode && tooltipPos && (
@@ -622,36 +621,36 @@ export const CinematicHeroSculpture: React.FC<CinematicHeroSculptureProps> = ({
             top: `${tooltipPos.y}px`,
           }}
         >
-          <div className="p-3.5 rounded-2xl bg-[#1D0445]/95 border border-[#0FD3F2]/50 shadow-[0_0_30px_rgba(15,211,242,0.35)] backdrop-blur-xl min-w-[240px]">
+          <div className="p-3.5 rounded-2xl liquid-glass-strong border border-white/20 shadow-2xl backdrop-blur-xl min-w-[240px]">
             <div className="flex items-center justify-between gap-3 mb-1.5">
-              <span className="text-[10px] font-mono font-bold tracking-widest text-[#0FD3F2] uppercase">
+              <span className="text-[10px] font-mono font-bold tracking-widest text-white/80 uppercase">
                 {hoveredNode.location}
               </span>
               <span
                 className={`text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${
                   hoveredNode.status === 'critical'
-                    ? 'bg-[#921CC0]/25 text-[#921CC0] border border-[#921CC0]/50'
+                    ? 'bg-risk-critical/20 text-risk-critical border border-risk-critical/40'
                     : hoveredNode.status === 'alternative'
-                    ? 'bg-[#0FD3F2]/25 text-[#0FD3F2] border border-[#0FD3F2]/50'
-                    : 'bg-[#007CB8]/25 text-[#0FD3F2] border border-[#007CB8]/40'
+                    ? 'bg-white/20 text-white border border-white/30'
+                    : 'bg-risk-low/20 text-risk-low border border-risk-low/40'
                 }`}
               >
                 {hoveredNode.status}
               </span>
             </div>
-            <h5 className="text-xs font-extrabold text-white">{hoveredNode.name}</h5>
-            <p className="text-[11px] text-[#CBD5E1] mt-0.5">{hoveredNode.component}</p>
+            <h5 className="text-xs font-semibold text-white">{hoveredNode.name}</h5>
+            <p className="text-[11px] text-white/70 mt-0.5">{hoveredNode.component}</p>
             <div className="mt-2 pt-2 border-t border-white/10 flex items-center justify-between text-[10px]">
-              <span className="text-[#CBD5E1]/70">Variance:</span>
+              <span className="text-white/50">Variance:</span>
               <span
                 className={`font-mono font-bold ${
-                  hoveredNode.status === 'critical' ? 'text-[#921CC0]' : 'text-[#0FD3F2]'
+                  hoveredNode.status === 'critical' ? 'text-risk-critical' : 'text-risk-low'
                 }`}
               >
                 {hoveredNode.leadTimeVariance}
               </span>
             </div>
-            <div className="mt-1 text-[9px] text-[#0FD3F2] text-right font-semibold">
+            <div className="mt-1 text-[9px] text-white/70 text-right font-medium">
               Click node to isolate telemetry →
             </div>
           </div>
@@ -659,8 +658,8 @@ export const CinematicHeroSculpture: React.FC<CinematicHeroSculptureProps> = ({
       )}
 
       {/* Centerpiece Overlay Control Indicator */}
-      <div className="absolute bottom-4 left-6 pointer-events-none flex items-center gap-2 text-[11px] font-mono text-[#CBD5E1]/80 bg-[#171665]/80 px-3 py-1.5 rounded-full border border-[#0FD3F2]/30 backdrop-blur-md">
-        <span className="w-2 h-2 rounded-full bg-[#0FD3F2] animate-ping" />
+      <div className="absolute bottom-4 left-6 pointer-events-none flex items-center gap-2 text-[11px] font-mono text-white/70 bg-black/60 px-3 py-1.5 rounded-full border border-white/15 backdrop-blur-md">
+        <span className="w-2 h-2 rounded-full bg-white animate-ping" />
         <span>Interactive 3D Core • Drag to Tilt • Hover Nodes</span>
       </div>
     </div>

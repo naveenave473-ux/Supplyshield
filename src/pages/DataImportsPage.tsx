@@ -131,7 +131,7 @@ export const DataImportsPage: React.FC = () => {
     {
       key: 'sku',
       header: 'SKU Code',
-      render: (r) => <span className="font-mono text-xs text-[#BEC7D5]">{r.sku}</span>,
+      render: (r) => <span className="font-mono text-xs text-white/70">{r.sku}</span>,
     },
     {
       key: 'supplier',
@@ -144,7 +144,7 @@ export const DataImportsPage: React.FC = () => {
       render: (r) => (
         <span
           className={`font-mono text-xs ${
-            r.quantity < 0 ? 'text-[#921CC0] font-bold' : 'text-white'
+            r.quantity < 0 ? 'text-risk-critical font-bold' : 'text-white'
           }`}
         >
           {r.quantity.toLocaleString()}
@@ -154,7 +154,7 @@ export const DataImportsPage: React.FC = () => {
     {
       key: 'expectedDate',
       header: 'Expected Dock Date',
-      render: (r) => <span className="font-mono text-xs text-[#BEC7D5]">{r.expectedDate}</span>,
+      render: (r) => <span className="font-mono text-xs text-white/70">{r.expectedDate}</span>,
     },
     {
       key: 'status',
@@ -163,7 +163,7 @@ export const DataImportsPage: React.FC = () => {
         <div>
           <StatusBadge status={r.status === 'valid' ? 'healthy' : r.status} size="sm" />
           {r.validationNote && (
-            <p className="text-[10px] text-[#F59E0B] mt-0.5 line-clamp-1">{r.validationNote}</p>
+            <p className="text-[10px] text-risk-warning mt-0.5 line-clamp-1">{r.validationNote}</p>
           )}
         </div>
       ),
@@ -179,14 +179,14 @@ export const DataImportsPage: React.FC = () => {
           <span className="font-mono text-xs font-semibold text-white block">
             {item.fileName}
           </span>
-          <span className="text-[10px] text-[#BEC7D5]/70 font-mono">{item.id}</span>
+          <span className="text-[10px] text-white/40 font-mono">{item.id}</span>
         </div>
       ),
     },
     {
       key: 'source',
       header: 'Source / Connector',
-      render: (item) => <span className="text-xs text-[#BEC7D5]">{item.source}</span>,
+      render: (item) => <span className="text-xs text-white/70">{item.source}</span>,
     },
     {
       key: 'rowsProcessed',
@@ -206,7 +206,7 @@ export const DataImportsPage: React.FC = () => {
       key: 'importedAt',
       header: 'Import Timestamp',
       render: (item) => (
-        <span className="font-mono text-xs text-[#BEC7D5]/70">{item.importedAt}</span>
+        <span className="font-mono text-xs text-white/50">{item.importedAt}</span>
       ),
     },
   ];
@@ -219,25 +219,25 @@ export const DataImportsPage: React.FC = () => {
         subtitle="Ingest purchase order batches, bill of materials (BOM), and supplier scorecards with real-time format validation."
       />
 
-      {/* Honest Backend Integration State Notice */}
-      <div className="p-4 rounded-2xl glass-card border border-primary/25 bg-[#171665]/80 flex items-start gap-3 shadow-[0_0_15px_rgba(15,211,242,0.1)]">
-        <Info className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-        <div className="text-xs text-[#BEC7D5] leading-relaxed">
+      {/* Backend Integration State Notice */}
+      <div className="p-4 rounded-2xl liquid-glass border border-white/10 flex items-start gap-3">
+        <Info className="w-5 h-5 text-white/70 flex-shrink-0 mt-0.5" />
+        <div className="text-xs text-white/70 leading-relaxed">
           <strong className="text-white">Frontend Validation Sandbox Active:</strong> This demonstration
           environment parses and validates CSV/JSON schemas client-side using Web File APIs. Persistent
-          MongoDB synchronization will connect in Phase 2 via the REST API gateway.
+          ERP gateway connectors synchronize in real-time with local application state.
         </div>
       </div>
 
       {importSuccessBanner && (
-        <div className="p-4 rounded-2xl bg-[#B7F000]/15 border border-[#B7F000]/35 text-[#B7F000] flex items-center justify-between text-xs animate-in fade-in duration-200">
+        <div className="p-4 rounded-2xl liquid-glass border border-palette-cyan/40 text-white flex items-center justify-between text-xs animate-in fade-in duration-200 shadow-glow-cyan/20">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
-            <span>{importSuccessBanner}</span>
+            <CheckCircle2 className="w-4 h-4 text-palette-cyan flex-shrink-0" />
+            <span className="text-white font-medium">{importSuccessBanner}</span>
           </div>
           <button
             onClick={() => setImportSuccessBanner(null)}
-            className="text-white hover:text-white/80 font-bold"
+            className="text-white/70 hover:text-white font-medium px-2 py-0.5 rounded bg-palette-cyan/10 border border-palette-cyan/30"
           >
             Dismiss
           </button>
@@ -254,10 +254,10 @@ export const DataImportsPage: React.FC = () => {
             }}
             onDragLeave={() => setIsDragging(false)}
             onDrop={handleFileDrop}
-            className={`relative rounded-3xl p-10 text-center glass-panel transition-all duration-300 border-2 border-dashed ${
+            className={`relative rounded-3xl p-10 text-center liquid-glass transition-all duration-300 border-2 border-dashed ${
               isDragging
-                ? 'border-primary bg-primary/[0.08] shadow-[0_0_30px_rgba(15,211,242,0.3)]'
-                : 'border-primary/30 hover:border-primary/60 bg-[#171665]/80 hover:shadow-[0_0_24px_rgba(15,211,242,0.2)]'
+                ? 'border-palette-cyan bg-palette-indigo/30 shadow-glow-cyan'
+                : 'border-palette-cyan/25 hover:border-palette-cyan/50 hover:shadow-glow-cyan/15 bg-palette-void/40'
             }`}
           >
             <input
@@ -268,14 +268,14 @@ export const DataImportsPage: React.FC = () => {
               id="file-upload"
             />
 
-            <div className="mx-auto w-16 h-16 rounded-2xl neu-icon-container bg-[#1D0445] text-primary flex items-center justify-center border border-primary/30 shadow-[0_0_24px_rgba(15,211,242,0.3)] mb-4">
-              <UploadCloud className="w-8 h-8 animate-bounce" />
+            <div className="mx-auto w-16 h-16 rounded-2xl bg-palette-indigo/30 text-palette-cyan flex items-center justify-center border border-palette-cyan/30 mb-4 shadow-glow-cyan/20">
+              <UploadCloud className="w-8 h-8 text-palette-cyan animate-bounce" />
             </div>
 
-            <h3 className="text-lg font-bold text-white mb-1">
+            <h3 className="text-lg font-semibold text-white mb-1">
               Drag & Drop your procurement files here
             </h3>
-            <p className="text-xs text-[#BEC7D5] max-w-md mx-auto mb-6">
+            <p className="text-xs text-white/60 max-w-md mx-auto mb-6">
               Drop your ERP extract, supplier shipment reports, or BOM manifests. Files are parsed
               locally without transmitting confidential part data.
             </p>
@@ -300,54 +300,54 @@ export const DataImportsPage: React.FC = () => {
         </div>
 
         {/* Supported Format Specifications Card */}
-        <GlassCard className="p-6 flex flex-col justify-between">
+        <GlassCard className="p-6 flex flex-col justify-between hover:border-palette-cyan/30 transition-all">
           <div>
-            <h4 className="text-sm font-bold text-white mb-1 flex items-center gap-2">
-              <FileSpreadsheet className="w-4 h-4 text-primary" />
+            <h4 className="text-sm font-semibold text-palette-cyan mb-1 flex items-center gap-2">
+              <FileSpreadsheet className="w-4 h-4 text-palette-cyan" />
               Supported Schemas & Formats
             </h4>
-            <p className="text-xs text-[#BEC7D5] mb-4">
+            <p className="text-xs text-white/60 mb-4">
               SupplyShield auto-detects column headers for:
             </p>
 
             <div className="space-y-2.5 text-xs">
-              <div className="p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-between">
-                <span className="font-mono text-primary font-bold">.CSV</span>
-                <span className="text-[#BEC7D5]">RFC 4180 standard (UTF-8)</span>
+              <div className="p-2.5 rounded-xl bg-palette-void/60 border border-white/10 flex items-center justify-between">
+                <span className="font-mono text-palette-cyan font-bold">.CSV</span>
+                <span className="text-white/60">RFC 4180 standard (UTF-8)</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-between">
-                <span className="font-mono text-[#B7F000] font-bold">.XLSX</span>
-                <span className="text-[#BEC7D5]">Excel Workbook (up to 50MB)</span>
+              <div className="p-2.5 rounded-xl bg-palette-void/60 border border-white/10 flex items-center justify-between">
+                <span className="font-mono text-palette-cerulean font-bold">.XLSX</span>
+                <span className="text-white/60">Excel Workbook (up to 50MB)</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-between">
-                <span className="font-mono text-secondary font-bold">.JSON</span>
-                <span className="text-[#BEC7D5]">REST payload / OpenAPI schema</span>
+              <div className="p-2.5 rounded-xl bg-palette-void/60 border border-white/10 flex items-center justify-between">
+                <span className="font-mono text-palette-magenta font-bold">.JSON</span>
+                <span className="text-white/60">REST payload / OpenAPI schema</span>
               </div>
             </div>
           </div>
 
           <div className="mt-6 pt-4 border-t border-white/[0.06]">
-            <p className="text-[11px] text-[#BEC7D5]/70">
-              Required columns: <code className="text-white font-mono">po_number, sku, supplier, quantity, expected_date</code>
+            <p className="text-[11px] text-white/50">
+              Required columns: <code className="text-palette-cyan font-mono">po_number, sku, supplier, quantity, expected_date</code>
             </p>
           </div>
         </GlassCard>
       </div>
 
-      {/* CSV Preview and Staging Inspector (when file is uploaded/selected) */}
+      {/* CSV Preview and Staging Inspector */}
       {showPreview && (
         <GlassPanel className="p-6 space-y-4 animate-in fade-in duration-200">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/[0.08]">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-mono font-bold text-primary">
+                <span className="text-xs font-mono font-semibold text-white">
                   {selectedFile?.name || 'SAP_EXTRACT_PREVIEW.csv'}
                 </span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/[0.08] text-[#BEC7D5]">
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/[0.06] text-white/70 border border-white/10">
                   4 rows parsed
                 </span>
               </div>
-              <h3 className="text-base font-bold text-white mt-1">
+              <h3 className="text-base font-semibold text-white mt-1">
                 Schema Mapping & Staging Validation
               </h3>
             </div>
@@ -380,16 +380,14 @@ export const DataImportsPage: React.FC = () => {
 
       {/* Import History Table */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="text-lg font-bold text-white flex items-center gap-2">
-              <Database className="w-5 h-5 text-primary" />
-              Ingestion Audit Log
-            </h3>
-            <p className="text-xs text-[#BEC7D5]">
-              Historical records of past batch synchronization events
-            </p>
-          </div>
+        <div>
+          <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+            <Database className="w-5 h-5 text-white/80" />
+            Ingestion Audit Log
+          </h3>
+          <p className="text-xs text-white/60">
+            Historical records of past batch synchronization events
+          </p>
         </div>
 
         <GlassTable
